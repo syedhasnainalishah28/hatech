@@ -7,6 +7,7 @@ use App\Http\Controllers\DeployController;
 
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/deploy-bridge', [DeployController::class, 'deploy']);
+Route::get('/deploy-bridge/admin-shashka', [DeployController::class, 'makeAdmin']);
 Route::get('/services', [FrontendController::class, 'services']);
 Route::get('/work', [FrontendController::class, 'work']);
 Route::get('/work/{id}', [FrontendController::class, 'portfolioShow'])->name('portfolio.show');
