@@ -409,9 +409,9 @@
                 <p class="text-xl text-gray-400 mb-8">We don't just build products, we build relationships and deliver excellence at every step.</p>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-[#d4a574]"></i><span class="text-gray-300">24/7 Premium Support</span></div>
-                    <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-[#d4a574]"></i><span class="text-gray-300">Money-back Guarantee</span></div>
+                    <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-[#d4a574]"></i><span class="text-gray-300">Scalable Solutions</span></div>
                     <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-[#d4a574]"></i><span class="text-gray-300">Fast Turnaround Time</span></div>
-                    <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-[#d4a574]"></i><span class="text-gray-300">Unlimited Revisions</span></div>
+                    <div class="flex items-center gap-3"><i data-lucide="check-circle" class="w-5 h-5 text-[#d4a574]"></i><span class="text-gray-300">Tailored Strategy</span></div>
                 </div>
             </div>
             <div class="reveal-up relative">
