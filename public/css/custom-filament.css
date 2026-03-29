@@ -1,0 +1,104 @@
+/* 
+   HA TECH - NUCLEAR DARK FIX v4.4
+   TARGETING TOPBAR, TABLE HEADERS, AND TEXT CONTRAST
+*/
+
+:root {
+    --primary-ha: #d4a574;
+    --bg-black: #000000;
+}
+
+/* 1. Global Reset */
+html,
+body,
+.fi-body {
+    background: #000 !important;
+}
+
+/* 2. Top Bar Correction (Force Black) */
+header.fi-topbar,
+header.fi-topbar nav,
+.fi-topbar div,
+.fi-topbar-ctn {
+    background-color: #000 !important;
+    background: #000 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 3. Table Header & Table Content (Force Black & Remove White) */
+.fi-ta-ctn,
+.fi-ta-header,
+.fi-ta-header-cell,
+.fi-ta-content,
+.fi-ta-row,
+.fi-ta-empty-state,
+.fi-section,
+.fi-section-header,
+.fi-main-ctn,
+.fi-ta-container {
+    background-color: #000 !important;
+    background: #000 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Specific fix for the white bar in table header */
+.fi-ta-header-cell {
+    background-color: #000 !important;
+}
+
+/* 4. Text Contrast (Nuclear Option for BRIGHT WHITE) */
+h1,
+h2,
+h3,
+h4,
+span,
+p,
+a,
+.fi-header-heading,
+.fi-ta-header-cell-label,
+.fi-ta-cell-content,
+.fi-sidebar-item-label,
+.fi-breadcrumbs-item-label,
+.fi-ta-empty-state-heading,
+.fi-ta-text-item-label {
+    color: #ffffff !important;
+}
+
+/* Labels and Helper Text */
+label,
+.fi-fo-field-wrp-label,
+.fi-fo-field-wrp-label span,
+.fi-fo-field-wrp-helper-text {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+/* 5. Icons visibility */
+svg.fi-sidebar-item-icon,
+svg.fi-ta-empty-state-icon,
+svg.fi-btn-icon {
+    color: var(--primary-ha) !important;
+}
+
+/* 6. Active Sidebar Item Fix */
+.fi-sidebar-item-active {
+    background-color: rgba(212, 165, 116, 0.1) !important;
+}
+
+/* 7. Hide the default white background on certain Filament components */
+.fi-modal-window,
+.fi-dropdown-panel {
+    background-color: #050505 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 8. Table Row styling */
+.fi-ta-row:hover {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* 9. Pagination Styling */
+.fi-ta-pagination {
+    background-color: #000 !important;
+    color: #fff !important;
+}
