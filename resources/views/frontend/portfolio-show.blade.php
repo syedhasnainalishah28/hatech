@@ -61,11 +61,57 @@
 
             <!-- Main Content -->
             <div class="lg:col-span-8">
-                <div class="reveal-up prose prose-invert prose-p:text-gray-400 prose-p:text-lg prose-p:leading-relaxed prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter max-w-none">
-                    @if($portfolio->content)
-                        {!! $portfolio->content !!}
-                    @else
-                        <div class="p-12 rounded-[40px] border border-dashed border-white/10 text-center">
+                <div class="space-y-32">
+                    @php 
+                        $sections = $portfolio->layout_sections ?? [];
+                        if(empty($sections) && !empty($portfolio->content)) {
+                            $sections = [['content' => $portfolio->content, 'layout' => 'media-left', 'media_type' => 'image']];
+                        }
+                    @endphp
+
+                    @foreach($sections as $section)
+                        <div class="reveal-up flex flex-col {{ ($section['layout'] ?? 'media-left') === 'media-right' ? 'lg:flex-row-reverse' : 'lg:flex-row' }} gap-12 lg:gap-20 items-center">
+                            <!-- Media Side -->
+                            <div class="w-full lg:w-1/2">
+                                <div class="rounded-[32px] overflow-hidden border border-white/5 bg-white/[0.02] relative group shadow-2xl">
+                                    @if(($section['media_type'] ?? 'image') === 'image')
+                                        @if(!empty($section['media_url']))
+                                            <img src="{{ asset('storage/' . $section['media_url']) }}" class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-105">
+                                        @else
+                                            <div class="aspect-square bg-[#1a0f11] flex items-center justify-center">
+                                                <i data-lucide="image" class="w-12 h-12 text-gray-800"></i>
+                                            </div>
+                                        @endif
+                                    @elseif(($section['media_type'] ?? '') === 'video')
+                                        <div class="aspect-video w-full">
+                                            @php
+                                                $videoUrl = $section['video_url'] ?? '';
+                                                // Simple YouTube/Vimeo embed conversion if needed, but assuming full embed link for now
+                                            @endphp
+                                            <iframe src="{{ $videoUrl }}" class="w-full h-full border-0" allowfullscreen></iframe>
+                                        </div>
+                                    @elseif(($section['media_type'] ?? '') === 'lottie')
+                                        <div class="aspect-square w-full p-8">
+                                            @php
+                                                $lottiePath = !empty($section['lottie_path']) ? asset('storage/' . $section['lottie_path']) : ($section['lottie_url'] ?? '');
+                                            @endphp
+                                            <lottie-player src="{{ $lottiePath }}" background="transparent" speed="1" loop autoplay class="w-full h-full"></lottie-player>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Content Side -->
+                            <div class="w-full lg:w-1/2">
+                                <div class="prose prose-invert prose-p:text-gray-400 prose-p:text-lg prose-p:leading-relaxed prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter max-w-none">
+                                    {!! $section['content'] ?? '' !!}
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+
+                    @if(empty($sections))
+                        <div class="reveal-up p-12 rounded-[40px] border border-dashed border-white/10 text-center">
                             <p class="text-gray-500 italic">Full case study content coming soon... This project showcases our commitment to elite technical execution and premium design aesthetics.</p>
                         </div>
                     @endif
@@ -79,6 +125,7 @@
                     </a>
                 </div>
             </div>
+
         </div>
     </section>
 </div>
@@ -88,4 +135,7 @@
     .prose p { margin-bottom: 2rem; }
     .prose img { border-radius: 32px; border: 1px solid rgba(255,255,255,0.05); margin-top: 4rem; margin-bottom: 4rem; }
 </style>
+@push('scripts')
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+@endpush
 @endsection

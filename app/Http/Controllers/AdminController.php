@@ -39,24 +39,85 @@ class AdminController extends Controller
     }
     public function portfolioCreate() { return view('admin.portfolios.create'); }
     public function portfolioStore(Request $request) {
-        $validated = $request->validate(['title' => 'required', 'category' => 'required', 'client_name' => 'nullable', 'project_date' => 'nullable|date', 'description' => 'nullable', 'image' => 'nullable|image', 'status' => 'required']);
-        $validated['slug'] = Str::slug($validated['title']);
-        if ($request->hasFile('image')) { $validated['image'] = $request->file('image')->store('portfolios', 'public'); }
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'year' => 'required|string|max:10',
+            'description' => 'required|string',
+            'image' => 'nullable|image|max:2048',
+            'is_featured' => 'nullable',
+            'sections' => 'nullable|array'
+        ]);
+
+        $validated['slug'] = $request->slug ?: Str::slug($validated['title']);
+        
+        if ($request->hasFile('image')) {
+            $validated['image_path'] = $request->file('image')->store('portfolios/thumbnails', 'public');
+        }
+
+        $sections = $request->input('sections', []);
+        foreach ($sections as $index => &$section) {
+            // Handle Media Uploads in Sections
+            if ($request->hasFile("sections.$index.media_file")) {
+                $section['media_url'] = $request->file("sections.$index.media_file")->store('portfolios/sections', 'public');
+            }
+            if ($request->hasFile("sections.$index.lottie_file")) {
+                $section['lottie_path'] = $request->file("sections.$index.lottie_file")->store('portfolios/lottie', 'public');
+            }
+        }
+        $validated['layout_sections'] = $sections;
+        $validated['is_featured'] = $request->has('is_featured');
+
         Portfolio::create($validated);
         return redirect()->route('admin.portfolios')->with('success', 'Portfolio created successfully.');
     }
+
     public function portfolioEdit($id) {
         $portfolio = Portfolio::findOrFail($id);
         return view('admin.portfolios.edit', compact('portfolio'));
     }
+
     public function portfolioUpdate(Request $request, $id) {
         $portfolio = Portfolio::findOrFail($id);
-        $validated = $request->validate(['title' => 'required', 'category' => 'required', 'client_name' => 'nullable', 'project_date' => 'nullable|date', 'description' => 'nullable', 'image' => 'nullable|image', 'status' => 'required']);
-        $validated['slug'] = Str::slug($validated['title']);
-        if ($request->hasFile('image')) { 
-            if ($portfolio->image) Storage::disk('public')->delete($portfolio->image);
-            $validated['image'] = $request->file('image')->store('portfolios', 'public'); 
+        
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'year' => 'required|string|max:10',
+            'description' => 'required|string',
+            'image' => 'nullable|image|max:2048',
+            'is_featured' => 'nullable',
+            'sections' => 'nullable|array'
+        ]);
+
+        $validated['slug'] = $request->slug ?: Str::slug($validated['title']);
+        
+        if ($request->hasFile('image')) {
+            if ($portfolio->image_path) Storage::disk('public')->delete($portfolio->image_path);
+            $validated['image_path'] = $request->file('image')->store('portfolios/thumbnails', 'public');
         }
+
+        $sections = $request->input('sections', []);
+        $existingSections = $portfolio->layout_sections ?? [];
+
+        foreach ($sections as $index => &$section) {
+            // Retain existing media if no new file uploaded
+            if (!$request->hasFile("sections.$index.media_file")) {
+                $section['media_url'] = $section['media_url'] ?? ($existingSections[$index]['media_url'] ?? null);
+            } else {
+                $section['media_url'] = $request->file("sections.$index.media_file")->store('portfolios/sections', 'public');
+            }
+
+            if (!$request->hasFile("sections.$index.lottie_file")) {
+                $section['lottie_path'] = $section['lottie_path'] ?? ($existingSections[$index]['lottie_path'] ?? null);
+            } else {
+                $section['lottie_path'] = $request->file("sections.$index.lottie_file")->store('portfolios/lottie', 'public');
+            }
+        }
+
+        $validated['layout_sections'] = $sections;
+        $validated['is_featured'] = $request->has('is_featured');
+
         $portfolio->update($validated);
         return redirect()->route('admin.portfolios')->with('success', 'Portfolio updated successfully.');
     }

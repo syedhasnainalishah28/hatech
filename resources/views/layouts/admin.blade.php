@@ -41,6 +41,7 @@
         select option { background-color: #1a0f11 !important; color: #ffffff !important; }
         select:focus option { background-color: #1a0f11 !important; }
     </style>
+    @stack('styles')
 </head>
 <body class="antialiased flex h-screen overflow-hidden">
     
