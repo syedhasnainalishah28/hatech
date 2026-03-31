@@ -176,12 +176,15 @@
 </div>
 
 <!-- Lightbox Modal -->
-<div id="lightbox" class="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-500 flex items-center justify-center p-6 md:p-12" onclick="closeLightbox()">
-    <button class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
-        <i data-lucide="x" class="w-8 h-8"></i>
+<div id="lightbox" class="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-500 flex items-center justify-center p-4 md:p-8" onclick="closeLightbox()">
+    <!-- Close Icon -->
+    <button class="absolute top-10 right-10 text-white/40 hover:text-white transition-colors z-[10001]">
+        <i data-lucide="x" class="w-10 h-10"></i>
     </button>
-    <div class="w-full max-w-7xl max-h-full flex items-center justify-center" onclick="event.stopPropagation()">
-        <div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div>
+    
+    <!-- Unified Content Container -->
+    <div id="lightbox-content" class="relative max-w-full max-h-full flex items-center justify-center transition-all duration-500 scale-95 opacity-0" onclick="event.stopPropagation()">
+        <!-- Dynamic Image/Video Injected Here -->
     </div>
 </div>
 
@@ -207,12 +210,19 @@
         opacity: 1;
         pointer-events: auto;
     }
+    #lightbox.active #lightbox-content {
+        opacity: 1;
+        transform: scale(1);
+    }
+    
     #lightbox-content img, #lightbox-content iframe {
-        box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
-        border-radius: 24px;
-        max-width: 100%;
-        max-height: 85vh;
+        box-shadow: 0 60px 120px -30px rgba(0,0,0,0.8);
+        border-radius: 32px;
+        max-width: 95vw;
+        max-height: 90vh; /* Strictly contained within viewport */
         object-fit: contain;
+        display: block;
+        margin: auto;
     }
     
     @media (max-width: 768px) {
@@ -224,15 +234,17 @@
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <script>
     function openLightbox(type, src) {
+        if (!src || src.includes('undefined')) return;
+
         const lightbox = document.getElementById('lightbox');
         const content = document.getElementById('lightbox-content');
+        
         content.innerHTML = '';
-
-        // Removed reveal-up active classes to prevent jumping/misalignment
+        
         if (type === 'image') {
-            content.innerHTML = `<img src="${src}" class="max-w-full max-h-[85vh] rounded-[24px] shadow-2xl">`;
+            content.innerHTML = `<img src="${src}" class="reveal-in shadow-3xl">`;
         } else if (type === 'video') {
-            content.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 rounded-[24px] shadow-2xl" allowfullscreen></iframe>`;
+            content.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 shadow-3xl" allowfullscreen></iframe>`;
         }
 
         lightbox.classList.add('active');
@@ -245,8 +257,13 @@
         document.body.style.overflow = '';
         setTimeout(() => {
             document.getElementById('lightbox-content').innerHTML = '';
-        }, 300);
+        }, 500);
     }
+
+    // Escape listener
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
 </script>
 @endpush
 @endsection
