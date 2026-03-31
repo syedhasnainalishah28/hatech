@@ -113,26 +113,23 @@
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            /* Direct Style Injection will handle movement */
-            transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0) translateZ(0); /* Atomic Hardware Layer */
         }
         #cursor-glow-outer {
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.4) 0%, transparent 70%);
-            /* Using gradient for softness, minimal blur for performance */
-            filter: blur(12px);
+            width: 120px;
+            height: 120px;
+            /* Multi-stop gradient for a natural soft glow without filter:blur filter */
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.4) 0%, rgba(212, 165, 116, 0.15) 30%, transparent 70%);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.25;
+            opacity: 0.3;
             will-change: transform;
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            /* Direct Style Injection will handle movement */
-            transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0) translateZ(0); /* Atomic Hardware Layer */
         }
 
         /* Cursor States */
@@ -165,7 +162,6 @@
             opacity: 0.3;
             transform: scale(0.98);
             pointer-events: none;
-            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
         }
         #main-content {
             transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -273,71 +269,54 @@
             let dotX = 0, dotY = 0;
             let glowX = 0, glowY = 0;
             
-            // INCREASED SPEED: Snappy but fluid
+            // PHYSICS CONSTANTS
             const dotLerp = 0.65; 
             const glowLerp = 0.25;
 
+            // Atomic Mousemove
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
             }, { passive: true });
 
-            // State management on a separate throttled pulse
-            let lastUpdate = 0;
-            document.addEventListener('mousemove', (e) => {
-                const now = performance.now();
-                if (now - lastUpdate > 80) { // Throttled probing for performance
-                    lastUpdate = now;
-                    const clickable = e.target.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
-                    const isZoom = e.target.closest('.cursor-zoom-trigger');
-                    const isText = !clickable && e.target.closest('p, h1, h2, h3, h4, span');
-
-                    if (isZoom) {
-                        body.classList.add('cursor-zoom', 'cursor-hover');
-                        body.classList.remove('cursor-pointer', 'cursor-text');
-                    } else if (clickable) {
-                        body.classList.add('cursor-pointer', 'cursor-hover');
-                        body.classList.remove('cursor-text', 'cursor-zoom');
-                    } else if (isText && e.target.innerText.trim().length > 0) {
-                        body.classList.add('cursor-text');
-                        body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-zoom');
-                    } else {
-                        body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text', 'cursor-zoom');
-                    }
-                }
-            }, { passive: true });
-
             document.addEventListener('mousedown', () => body.classList.add('is-clicking'));
             document.addEventListener('mouseup', () => body.classList.remove('is-clicking'));
 
+            let frame = 0;
             const tick = () => {
-                // Calculate Lerps
+                // Calculate Physics
                 dotX += (mouseX - dotX) * dotLerp;
                 dotY += (mouseY - dotY) * dotLerp;
                 glowX += (mouseX - glowX) * glowLerp;
                 glowY += (mouseY - glowY) * glowLerp;
 
-                // Dynamic Offsets Based on State
-                let dotOffX = -4, dotOffY = -4;
-                let scaleValue = body.classList.contains('is-clicking') ? 0.85 : 1;
+                // Throttled Probing (Approx 12fps check for links/text)
+                if (frame % 8 === 0) {
+                   const el = document.elementFromPoint(mouseX, mouseY);
+                   if (el) {
+                       const clickable = el.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
+                       const isZoom = el.closest('.cursor-zoom-trigger');
+                       const isText = !clickable && el.closest('p, h1, h2, h3, h4, span');
 
-                if (body.classList.contains('cursor-text')) {
-                    dotOffX = -15; dotOffY = -15;
-                } else if (body.classList.contains('cursor-zoom')) {
-                    dotOffX = -24; dotOffY = -24;
-                } else if (body.classList.contains('cursor-pointer')) {
-                    dotOffX = -20; dotOffY = -10;
+                       body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text', 'cursor-zoom');
+                       if (isZoom) body.classList.add('cursor-zoom', 'cursor-hover');
+                       else if (clickable) body.classList.add('cursor-pointer', 'cursor-hover');
+                       else if (isText && el.innerText.trim().length > 0) body.classList.add('cursor-text');
+                   }
                 }
 
-                // SURGICAL STYLE INJECTION (Performance Peak)
-                // We bypass CSS variables to avoid document-wide style recalculations on every frame
-                if (dot) {
-                    dot.style.transform = `translate3d(${(dotX + dotOffX).toFixed(1)}px, ${(dotY + dotOffY).toFixed(1)}px, 0) scale(${scaleValue})`;
-                }
-                if (glow) {
-                    glow.style.transform = `translate3d(${(glowX - 40).toFixed(1)}px, ${(glowY - 40).toFixed(1)}px, 0)`;
-                }
+                // Precision Style Injection
+                let offX = -4, offY = -4;
+                let sc = body.classList.contains('is-clicking') ? 0.85 : 1;
 
+                if (body.classList.contains('cursor-text')) { offX = -15; offY = -15; }
+                else if (body.classList.contains('cursor-zoom')) { offX = -24; offY = -24; }
+                else if (body.classList.contains('cursor-pointer')) { offX = -20; offY = -10; }
+
+                if (dot) dot.style.transform = `translate3d(${(dotX + offX).toFixed(1)}px, ${(dotY + offY).toFixed(1)}px, 0) scale(${sc})`;
+                if (glow) glow.style.transform = `translate3d(${(glowX - 60).toFixed(1)}px, ${(glowY - 60).toFixed(1)}px, 0)`;
+
+                frame++;
                 requestAnimationFrame(tick);
             };
             tick();
