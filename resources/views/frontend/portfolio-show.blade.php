@@ -79,18 +79,37 @@
             @endphp
 
             @foreach($sections as $index => $section)
+                @php
+                    $mediaType = $section['media_type'] ?? 'image';
+                    $hasMedia = false;
+                    $mediaSrc = '';
+
+                    if ($mediaType === 'image' && !empty($section['media_url'])) {
+                        $hasMedia = true;
+                        $mediaSrc = asset('storage/' . $section['media_url']);
+                    } elseif ($mediaType === 'video' && !empty($section['video_url'])) {
+                        $hasMedia = true;
+                        $mediaSrc = $section['video_url'];
+                    } elseif ($mediaType === 'lottie' && (!empty($section['lottie_path']) || !empty($section['lottie_url']))) {
+                        $hasMedia = true;
+                    }
+                @endphp
+
                 <div class="reveal-up flex flex-col {{ ($section['layout'] ?? 'media-left') === 'media-right' ? 'lg:flex-row-reverse' : 'lg:flex-row' }} gap-16 lg:gap-32 items-center">
                     <!-- Text Content -->
-                    <div class="w-full lg:w-1/2">
+                    <div class="w-full {{ $hasMedia ? 'lg:w-1/2' : 'lg:w-full max-w-4xl mx-auto text-center' }}">
                         <div class="relative">
+                            @if($hasMedia)
                             <span class="absolute -left-12 -top-8 text-8xl font-black text-white/[0.03] select-none pointer-events-none">
                                 {{ sprintf("%02d", $index + 1) }}
                             </span>
+                            @endif
                             
                             <div class="relative z-10">
-                                <div class="flex items-center gap-3 mb-8">
+                                <div class="flex items-center gap-3 mb-8 {{ $hasMedia ? '' : 'justify-center' }}">
                                     <div class="h-[1px] w-12 bg-[#d4a574]/40"></div>
                                     <span class="text-[10px] font-black uppercase tracking-[0.5em] text-[#d4a574]">Phase {{ $index + 1 }}</span>
+                                    <div class="h-[1px] w-12 bg-[#d4a574]/40 {{ $hasMedia ? 'hidden' : '' }}"></div>
                                 </div>
                                 
                                 <div class="prose prose-invert prose-p:text-gray-400 prose-p:text-lg prose-p:leading-relaxed prose-headings:font-display prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tighter max-w-none prose-img:hidden">
@@ -100,24 +119,22 @@
                         </div>
                     </div>
 
+                    @if($hasMedia)
                     <!-- Media Container -->
                     <div class="w-full lg:w-1/2 relative group">
                         <div class="absolute -inset-10 bg-[#d4a574]/5 blur-[80px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000 -z-10"></div>
                         
-                        <div class="rounded-[40px] overflow-hidden border border-white/5 bg-white/[0.02] relative shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)]">
-                            @if(($section['media_type'] ?? 'image') === 'image')
-                                @if(!empty($section['media_url']))
-                                    <img src="{{ asset('storage/' . $section['media_url']) }}" class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105">
-                                @else
-                                    <div class="aspect-square bg-white/5 flex items-center justify-center">
-                                        <i data-lucide="image" class="w-12 h-12 text-gray-800"></i>
-                                    </div>
-                                @endif
-                            @elseif(($section['media_type'] ?? '') === 'video')
-                                <div class="aspect-video w-full">
-                                    <iframe src="{{ $section['video_url'] ?? '' }}" class="w-full h-full border-0" allowfullscreen></iframe>
+                        <div class="rounded-[40px] overflow-hidden border border-white/5 bg-white/[0.02] relative shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] cursor-zoom-trigger" 
+                             @if($mediaType !== 'lottie') onclick="openLightbox('{{ $mediaType }}', '{{ $mediaSrc }}')" @endif>
+                            
+                            @if($mediaType === 'image')
+                                <img src="{{ $mediaSrc }}" class="w-full h-auto object-cover transition-transform duration-1000 group-hover:scale-105">
+                            @elseif($mediaType === 'video')
+                                <div class="aspect-video w-full pointer-events-none">
+                                    <iframe src="{{ $mediaSrc }}" class="w-full h-full border-0" allowfullscreen></iframe>
                                 </div>
-                            @elseif(($section['media_type'] ?? '') === 'lottie')
+                                <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
+                            @elseif($mediaType === 'lottie')
                                 <div class="aspect-square w-full p-12">
                                     @php
                                         $lottiePath = !empty($section['lottie_path']) ? asset('storage/' . $section['lottie_path']) : ($section['lottie_url'] ?? '');
@@ -127,6 +144,7 @@
                             @endif
                         </div>
                     </div>
+                    @endif
                 </div>
             @endforeach
 
@@ -157,6 +175,16 @@
     </section>
 </div>
 
+<!-- Lightbox Modal -->
+<div id="lightbox" class="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-500 flex items-center justify-center p-6 md:p-12" onclick="closeLightbox()">
+    <button class="absolute top-8 right-8 text-white/50 hover:text-white transition-colors">
+        <i data-lucide="x" class="w-8 h-8"></i>
+    </button>
+    <div class="w-full max-w-7xl max-h-full flex items-center justify-center" onclick="event.stopPropagation()">
+        <div id="lightbox-content" class="w-full h-full flex items-center justify-center"></div>
+    </div>
+</div>
+
 <style>
     .prose h2 { font-size: 3rem; line-height: 0.95; margin-top: 2rem; margin-bottom: 2rem; color: #d4a574; font-family: 'Montserrat', sans-serif; font-weight: 900; letter-spacing: -0.04em; }
     .prose h3 { font-size: 1.5rem; color: white; margin-bottom: 1.5rem; }
@@ -175,6 +203,18 @@
         background: rgba(212, 165, 116, 0.05);
     }
     
+    #lightbox.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    #lightbox-content img, #lightbox-content iframe {
+        box-shadow: 0 50px 100px -20px rgba(0,0,0,0.5);
+        border-radius: 24px;
+        max-width: 100%;
+        max-height: 85vh;
+        object-fit: contain;
+    }
+    
     @media (max-width: 768px) {
         .prose h2 { font-size: 2rem; }
     }
@@ -182,6 +222,37 @@
 
 @push('scripts')
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<script>
+    function openLightbox(type, src) {
+        const lightbox = document.getElementById('lightbox');
+        const content = document.getElementById('lightbox-content');
+        content.innerHTML = '';
+
+        if (type === 'image') {
+            content.innerHTML = `<img src="${src}" class="reveal-up active">`;
+        } else if (type === 'video') {
+            content.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 reveal-up active" allowfullscreen></iframe>`;
+        }
+
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+        const lightbox = document.getElementById('lightbox');
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            document.getElementById('lightbox-content').innerHTML = '';
+        }, 500);
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
+    });
+</script>
 @endpush
+@endsection
 @endsection
 

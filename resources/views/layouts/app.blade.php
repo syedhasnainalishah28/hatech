@@ -108,25 +108,29 @@
             height: 36px;
             background-size: contain;
             background-repeat: no-repeat;
-            /* White Mac Pointer */
             background-image: url("{{ asset('images/pointer_mac.svg') }}");
             will-change: transform;
             top: 0;
             left: 0;
+            backface-visibility: hidden;
+            transform: translate3d(0,0,0);
         }
         #cursor-glow-outer {
-            width: 70px;
-            height: 70px;
-            background: radial-gradient(circle, #d4a574 0%, transparent 70%);
-            filter: blur(20px);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.4) 0%, transparent 70%);
+            /* Reduced blur for performance, using gradient for softness */
+            filter: blur(15px);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.3;
+            opacity: 0.25;
             will-change: transform;
             top: 0;
             left: 0;
+            backface-visibility: hidden;
+            transform: translate3d(0,0,0);
         }
 
         /* Cursor States */
@@ -137,17 +141,22 @@
             height: 52px;
         }
         body.cursor-text #cursor-dot {
-            /* Mac I-Beam Icon */
             background-image: url("{{ asset('images/ibeam_mac.svg') }}");
             width: 30px;
             height: 30px;
         }
+        body.cursor-zoom #cursor-dot {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3Cline x1='11' y1='8' x2='11' y2='14'/%3E%3Cline x1='8' y1='11' x2='14' y2='11'/%3E%3C/svg%3E");
+            width: 48px;
+            height: 48px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
+        }
 
         .cursor-hover #cursor-glow-outer {
-            width: 100px;
-            height: 100px;
-            opacity: 0.6;
-            filter: blur(25px);
+            width: 120px;
+            height: 120px;
+            opacity: 0.5;
+            filter: blur(20px);
         }
 
         #main-content.modal-active {
@@ -239,24 +248,25 @@
             let glowY = 0;
 
             let lastTarget = null;
+            // Use a light check on every target change
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 
-                // Only check intersection if target changes for performance
                 if (e.target !== lastTarget) {
                     lastTarget = e.target;
-                    const isClickable = lastTarget.closest('a, button, .group, [role="button"]');
-                    const isText = lastTarget.closest('p, h1, h2, h3, h4, span, div:not(:has(*))');
+                    const clickable = lastTarget.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
+                    const isZoom = lastTarget.closest('.cursor-zoom-trigger');
+                    const isText = !clickable && lastTarget.closest('p, h1, h2, h3, h4, span');
 
-                    if (isClickable) {
+                    body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text', 'cursor-zoom');
+                    
+                    if (isZoom) {
+                        body.classList.add('cursor-zoom', 'cursor-hover');
+                    } else if (clickable) {
                         body.classList.add('cursor-pointer', 'cursor-hover');
-                        body.classList.remove('cursor-text');
                     } else if (isText && lastTarget.innerText.trim().length > 0) {
                         body.classList.add('cursor-text');
-                        body.classList.remove('cursor-pointer', 'cursor-hover');
-                    } else {
-                        body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text');
                     }
                 }
             }, { passive: true });
@@ -282,6 +292,10 @@
                     if (body.classList.contains('cursor-text')) {
                         offsetX = -15; 
                         offsetY = -15;
+                        origin = '50% 50%';
+                    } else if (body.classList.contains('cursor-zoom')) {
+                        offsetX = -24; 
+                        offsetY = -24;
                         origin = '50% 50%';
                     } else if (body.classList.contains('cursor-pointer')) {
                         offsetX = -20; 
