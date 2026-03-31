@@ -163,6 +163,17 @@
     .prose p { margin-bottom: 2.5rem; font-size: 1.15rem; }
     .prose li { color: #d1d5db; margin-bottom: 0.75rem; font-size: 1.1rem; }
     .prose strong { color: #d4a574; }
+    .prose a { 
+        color: #d4a574; 
+        text-decoration: none; 
+        border-bottom: 1px solid rgba(212, 165, 116, 0.3); 
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+    .prose a:hover {
+        border-bottom-color: #d4a574;
+        background: rgba(212, 165, 116, 0.05);
+    }
     
     @media (max-width: 768px) {
         .prose h2 { font-size: 2rem; }
