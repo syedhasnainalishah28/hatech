@@ -265,25 +265,23 @@
             const dot = document.getElementById('cursor-dot');
             const glow = document.getElementById('cursor-glow-outer');
             
+            // Global Coordinate Tracking
             let mouseX = 0, mouseY = 0;
-            let glowX = 0, glowY = 0;
-            const glowLerp = 0.3; // Tightened trailing glow
 
-            // Zero-Latency Mouse Capture
+            // TOTAL-INSTANT DIRECT DRIVE: Zero Latency
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
 
-                // INSTANT UPDATE for the Dot (Bypasses animation loop for zero delay)
+                // Sync Dot & Glow (No more animation loop for movement)
                 let offX = -4, offY = -4;
                 let sc = body.classList.contains('is-clicking') ? 0.85 : 1;
                 if (body.classList.contains('cursor-text')) { offX = -15; offY = -15; }
                 else if (body.classList.contains('cursor-zoom')) { offX = -24; offY = -24; }
                 else if (body.classList.contains('cursor-pointer')) { offX = -20; offY = -10; }
 
-                if (dot) {
-                    dot.style.transform = `translate3d(${mouseX + offX}px, ${mouseY + offY}px, 0) scale(${sc})`;
-                }
+                if (dot) dot.style.transform = `translate3d(${mouseX + offX}px, ${mouseY + offY}px, 0) scale(${sc})`;
+                if (glow) glow.style.transform = `translate3d(${mouseX - 60}px, ${mouseY - 60}px, 0)`;
             }, { passive: true });
 
             document.addEventListener('mousedown', () => body.classList.add('is-clicking'));
@@ -291,12 +289,8 @@
 
             let frame = 0;
             const tick = () => {
-                // Glow remains in the loop for a smooth high-end trail
-                glowX += (mouseX - glowX) * glowLerp;
-                glowY += (mouseY - glowY) * glowLerp;
-
-                // Throttled Probing (Approx 12fps check)
-                if (frame % 8 === 0) {
+                // The loop now only handles non-latency-critical background probing
+                if (frame % 10 === 0) {
                    const el = document.elementFromPoint(mouseX, mouseY);
                    if (el) {
                        const clickable = el.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
@@ -309,11 +303,6 @@
                        else if (isText && el.innerText.trim().length > 0) body.classList.add('cursor-text');
                    }
                 }
-
-                if (glow) {
-                    glow.style.transform = `translate3d(${(glowX - 60).toFixed(1)}px, ${(glowY - 60).toFixed(1)}px, 0)`;
-                }
-
                 frame++;
                 requestAnimationFrame(tick);
             };
