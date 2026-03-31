@@ -200,6 +200,25 @@
             pointer-events: auto;
         }
 
+        /* Global Lightbox Styling */
+        #lightbox.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #lightbox.active #lightbox-content {
+            opacity: 1;
+            transform: scale(1);
+        }
+        #lightbox-content img, #lightbox-content iframe {
+            box-shadow: 0 80px 160px -40px rgba(0,0,0,0.9);
+            border-radius: 32px;
+            max-width: 90vw;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+            margin: auto;
+        }
+        
         /* Dropdown Styling */
         select option { background-color: #1a0f11 !important; color: #ffffff !important; }
         select:focus option { background-color: #1a0f11 !important; }
@@ -229,6 +248,14 @@
 
     <div id="modal-overlay"></div>
 
+    <!-- Global Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-[10000] bg-black/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-500 grid place-items-center p-4 md:p-12" onclick="closeLightbox()">
+        <button class="absolute top-10 right-10 text-white/40 hover:text-white transition-colors z-[10001]">
+            <i data-lucide="x" class="w-10 h-10"></i>
+        </button>
+        <div id="lightbox-content" class="relative max-w-full max-h-full transition-all duration-500 scale-90 opacity-0" onclick="event.stopPropagation()"></div>
+    </div>
+
     <!-- MODAL STACK -->
     @stack('modals')
 
@@ -244,9 +271,9 @@
             let dotX = 0, dotY = 0;
             let glowX = 0, glowY = 0;
             
-            // Figma-grade Lerp Factors
-            const dotLerp = 0.35; 
-            const glowLerp = 0.12;
+            // INCREASED SPEED: Snappy but fluid
+            const dotLerp = 0.65; 
+            const glowLerp = 0.25;
 
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
@@ -307,6 +334,30 @@
                 requestAnimationFrame(tick);
             };
             tick();
+
+            // GLOBAL LIGHTBOX LOGIC
+            window.openLightbox = function(type, src) {
+                if (!src || src === '' || src.includes('undefined')) return;
+                const lb = document.getElementById('lightbox');
+                const cont = document.getElementById('lightbox-content');
+                cont.innerHTML = '';
+                if (type === 'image') {
+                    cont.innerHTML = `<img src="${src}" class="shadow-4xl">`;
+                } else if (type === 'video') {
+                    cont.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 shadow-4xl" allowfullscreen></iframe>`;
+                }
+                lb.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            };
+
+            window.closeLightbox = function() {
+                const lb = document.getElementById('lightbox');
+                lb.classList.remove('active');
+                document.body.style.overflow = '';
+                setTimeout(() => { document.getElementById('lightbox-content').innerHTML = ''; }, 500);
+            };
+
+            document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
             const nav = document.getElementById('main-nav');
             window.addEventListener('scroll', () => {
