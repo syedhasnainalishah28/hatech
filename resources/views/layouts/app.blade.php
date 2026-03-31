@@ -59,15 +59,13 @@
             --primary: #d4a574;
             --background: #0a0506;
         }
-        html, body, * {
-            cursor: none !important;
-        }
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--background);
             color: white;
             margin: 0;
             overflow-x: hidden;
+            cursor: auto;
         }
         h1, h2, h3, h4, h5, h6, .font-display {
             font-family: 'Montserrat', sans-serif;
@@ -99,65 +97,6 @@
             backdrop-filter: blur(10px);
         }
 
-        /* Figma AI Cursor Styles with Mac Look */
-        #cursor-dot {
-            position: fixed;
-            pointer-events: none;
-            z-index: 10000;
-            width: 36px;
-            height: 36px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-image: url("{{ asset('images/pointer_mac.svg') }}");
-            will-change: transform;
-            top: 0;
-            left: 0;
-            backface-visibility: hidden;
-            transform: translate3d(0, 0, 0) translateZ(0); /* Atomic Hardware Layer */
-        }
-        #cursor-glow-outer {
-            width: 120px;
-            height: 120px;
-            /* Multi-stop gradient for a natural soft glow without filter:blur filter */
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.4) 0%, rgba(212, 165, 116, 0.15) 30%, transparent 70%);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            opacity: 0.3;
-            will-change: transform;
-            top: 0;
-            left: 0;
-            backface-visibility: hidden;
-            transform: translate3d(0, 0, 0) translateZ(0); /* Atomic Hardware Layer */
-        }
-
-        /* Cursor States */
-        body.cursor-pointer #cursor-dot {
-            /* Mac Hand Icon */
-            background-image: url("{{ asset('images/hand.svg') }}");
-            width: 52px;
-            height: 52px;
-        }
-        body.cursor-text #cursor-dot {
-            background-image: url("{{ asset('images/ibeam_mac.svg') }}");
-            width: 30px;
-            height: 30px;
-        }
-        body.cursor-zoom #cursor-dot {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3Cline x1='11' y1='8' x2='11' y2='14'/%3E%3Cline x1='8' y1='11' x2='14' y2='11'/%3E%3C/svg%3E");
-            width: 48px;
-            height: 48px;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.5));
-        }
-
-        .cursor-hover #cursor-glow-outer {
-            width: 180px;
-            height: 180px;
-            opacity: 0.5;
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.45) 0%, rgba(212, 165, 116, 0.2) 40%, transparent 70%);
-        }
-
         #main-content.modal-active {
             opacity: 0.3;
             transform: scale(0.98);
@@ -168,14 +107,8 @@
             will-change: transform, opacity;
         }
         
-        /* Hide Custom Cursor on Mobile/Touch */
+        /* Mobile Overflows */
         @media (max-width: 1024px) {
-            #cursor-dot, #cursor-glow-outer {
-                display: none !important;
-            }
-            html, body, * {
-                cursor: auto !important;
-            }
             html, body {
                 overflow-x: hidden !important;
                 width: 100%;
@@ -223,9 +156,6 @@
     </style>
 </head>
 <body class="antialiased opacity-0 transition-opacity duration-700 overflow-x-hidden" id="main-body">
-    <!-- Figma AI Cursor Elements -->
-    <div id="cursor-dot"></div>
-    <div id="cursor-glow-outer"></div>
 
     <!-- Texture & Mesh -->
     <div class="fixed inset-0 pointer-events-none -z-10 opacity-[0.4]" 
@@ -261,52 +191,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             const body = document.getElementById('main-body');
             body.classList.remove('opacity-0');
-            
-            const dot = document.getElementById('cursor-dot');
-            const glow = document.getElementById('cursor-glow-outer');
-            
-            // Global Coordinate Tracking
-            let mouseX = 0, mouseY = 0;
-
-            // TOTAL-INSTANT DIRECT DRIVE: Zero Latency
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-
-                // Sync Dot & Glow (No more animation loop for movement)
-                let offX = -4, offY = -4;
-                let sc = body.classList.contains('is-clicking') ? 0.85 : 1;
-                if (body.classList.contains('cursor-text')) { offX = -15; offY = -15; }
-                else if (body.classList.contains('cursor-zoom')) { offX = -24; offY = -24; }
-                else if (body.classList.contains('cursor-pointer')) { offX = -20; offY = -10; }
-
-                if (dot) dot.style.transform = `translate3d(${mouseX + offX}px, ${mouseY + offY}px, 0) scale(${sc})`;
-                if (glow) glow.style.transform = `translate3d(${mouseX - 60}px, ${mouseY - 60}px, 0)`;
-            }, { passive: true });
-
-            document.addEventListener('mousedown', () => body.classList.add('is-clicking'));
-            document.addEventListener('mouseup', () => body.classList.remove('is-clicking'));
-
-            let frame = 0;
-            const tick = () => {
-                // The loop now only handles non-latency-critical background probing
-                if (frame % 10 === 0) {
-                   const el = document.elementFromPoint(mouseX, mouseY);
-                   if (el) {
-                       const clickable = el.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
-                       const isZoom = el.closest('.cursor-zoom-trigger');
-                       const isText = !clickable && el.closest('p, h1, h2, h3, h4, span');
-
-                       body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text', 'cursor-zoom');
-                       if (isZoom) body.classList.add('cursor-zoom', 'cursor-hover');
-                       else if (clickable) body.classList.add('cursor-pointer', 'cursor-hover');
-                       else if (isText && el.innerText.trim().length > 0) body.classList.add('cursor-text');
-                   }
-                }
-                frame++;
-                requestAnimationFrame(tick);
-            };
-            tick();
 
             // GLOBAL LIGHTBOX LOGIC
             window.openLightbox = function(type, src) {
