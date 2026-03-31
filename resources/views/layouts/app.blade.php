@@ -266,17 +266,24 @@
             const glow = document.getElementById('cursor-glow-outer');
             
             let mouseX = 0, mouseY = 0;
-            let dotX = 0, dotY = 0;
             let glowX = 0, glowY = 0;
-            
-            // PHYSICS CONSTANTS
-            const dotLerp = 0.65; 
-            const glowLerp = 0.25;
+            const glowLerp = 0.3; // Tightened trailing glow
 
-            // Atomic Mousemove
+            // Zero-Latency Mouse Capture
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
+
+                // INSTANT UPDATE for the Dot (Bypasses animation loop for zero delay)
+                let offX = -4, offY = -4;
+                let sc = body.classList.contains('is-clicking') ? 0.85 : 1;
+                if (body.classList.contains('cursor-text')) { offX = -15; offY = -15; }
+                else if (body.classList.contains('cursor-zoom')) { offX = -24; offY = -24; }
+                else if (body.classList.contains('cursor-pointer')) { offX = -20; offY = -10; }
+
+                if (dot) {
+                    dot.style.transform = `translate3d(${mouseX + offX}px, ${mouseY + offY}px, 0) scale(${sc})`;
+                }
             }, { passive: true });
 
             document.addEventListener('mousedown', () => body.classList.add('is-clicking'));
@@ -284,13 +291,11 @@
 
             let frame = 0;
             const tick = () => {
-                // Calculate Physics
-                dotX += (mouseX - dotX) * dotLerp;
-                dotY += (mouseY - dotY) * dotLerp;
+                // Glow remains in the loop for a smooth high-end trail
                 glowX += (mouseX - glowX) * glowLerp;
                 glowY += (mouseY - glowY) * glowLerp;
 
-                // Throttled Probing (Approx 12fps check for links/text)
+                // Throttled Probing (Approx 12fps check)
                 if (frame % 8 === 0) {
                    const el = document.elementFromPoint(mouseX, mouseY);
                    if (el) {
@@ -305,16 +310,9 @@
                    }
                 }
 
-                // Precision Style Injection
-                let offX = -4, offY = -4;
-                let sc = body.classList.contains('is-clicking') ? 0.85 : 1;
-
-                if (body.classList.contains('cursor-text')) { offX = -15; offY = -15; }
-                else if (body.classList.contains('cursor-zoom')) { offX = -24; offY = -24; }
-                else if (body.classList.contains('cursor-pointer')) { offX = -20; offY = -10; }
-
-                if (dot) dot.style.transform = `translate3d(${(dotX + offX).toFixed(1)}px, ${(dotY + offY).toFixed(1)}px, 0) scale(${sc})`;
-                if (glow) glow.style.transform = `translate3d(${(glowX - 60).toFixed(1)}px, ${(glowY - 60).toFixed(1)}px, 0)`;
+                if (glow) {
+                    glow.style.transform = `translate3d(${(glowX - 60).toFixed(1)}px, ${(glowY - 60).toFixed(1)}px, 0)`;
+                }
 
                 frame++;
                 requestAnimationFrame(tick);
