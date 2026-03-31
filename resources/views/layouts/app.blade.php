@@ -113,7 +113,8 @@
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            transform: translate3d(var(--mouse-x, 0), var(--mouse-y, 0), 0);
+            /* Direct Style Injection will handle movement */
+            transform: translate3d(0, 0, 0);
         }
         #cursor-glow-outer {
             width: 80px;
@@ -130,7 +131,8 @@
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            transform: translate3d(var(--glow-x, 0), var(--glow-y, 0), 0);
+            /* Direct Style Injection will handle movement */
+            transform: translate3d(0, 0, 0);
         }
 
         /* Cursor States */
@@ -317,6 +319,8 @@
 
                 // Dynamic Offsets Based on State
                 let dotOffX = -4, dotOffY = -4;
+                let scaleValue = body.classList.contains('is-clicking') ? 0.85 : 1;
+
                 if (body.classList.contains('cursor-text')) {
                     dotOffX = -15; dotOffY = -15;
                 } else if (body.classList.contains('cursor-zoom')) {
@@ -325,11 +329,14 @@
                     dotOffX = -20; dotOffY = -10;
                 }
 
-                // Smooth CSS Injections
-                document.documentElement.style.setProperty('--mouse-x', `${(dotX + dotOffX).toFixed(2)}px`);
-                document.documentElement.style.setProperty('--mouse-y', `${(dotY + dotOffY).toFixed(2)}px`);
-                document.documentElement.style.setProperty('--glow-x', `${(glowX - 40).toFixed(2)}px`);
-                document.documentElement.style.setProperty('--glow-y', `${(glowY - 40).toFixed(2)}px`);
+                // SURGICAL STYLE INJECTION (Performance Peak)
+                // We bypass CSS variables to avoid document-wide style recalculations on every frame
+                if (dot) {
+                    dot.style.transform = `translate3d(${(dotX + dotOffX).toFixed(1)}px, ${(dotY + dotOffY).toFixed(1)}px, 0) scale(${scaleValue})`;
+                }
+                if (glow) {
+                    glow.style.transform = `translate3d(${(glowX - 40).toFixed(1)}px, ${(glowY - 40).toFixed(1)}px, 0)`;
+                }
 
                 requestAnimationFrame(tick);
             };
