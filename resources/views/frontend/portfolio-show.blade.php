@@ -254,5 +254,4 @@
 </script>
 @endpush
 @endsection
-@endsection
 
