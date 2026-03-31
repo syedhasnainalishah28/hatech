@@ -9,6 +9,7 @@ Route::get('/services', [FrontendController::class, 'services']);
 Route::get('/work', [FrontendController::class, 'work']);
 Route::get('/work/{id}', [FrontendController::class, 'portfolioShow'])->name('portfolio.show');
 Route::get('/blogs', [FrontendController::class, 'blogs']);
+
 Route::get('/about', [FrontendController::class, 'about']);
 Route::get('/about/founder', [FrontendController::class, 'founder']);
 Route::get('/about/ceo', [FrontendController::class, 'ceo']);
@@ -39,6 +40,7 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post('/maintenance/toggle', [AdminController::class, 'toggleMaintenance'])->name('admin.maintenance.toggle');
     
     // Portfolios
     Route::get('/portfolios', [AdminController::class, 'portfolios'])->name('admin.portfolios');

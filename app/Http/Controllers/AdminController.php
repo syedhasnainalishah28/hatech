@@ -14,10 +14,26 @@ use App\Models\ServiceOrderUpdate;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 
 class AdminController extends Controller
 {
+    public function toggleMaintenance(Request $request) {
+        $isDown = App::isDownForMaintenance();
+        
+        if ($isDown) {
+            Artisan::call('up');
+            return back()->with('success', 'Website is now LIVE.');
+        } else {
+            // Use the secret token for bypass
+            Artisan::call('down', [
+                '--secret' => 'hasnain-access'
+            ]);
+            return back()->with('success', 'Maintenance Mode ON. Use /hasnain-access to bypass.');
+        }
+    }
     public function dashboard() {
         $stats = [
             'revenue' => Order::where('status', 'completed')->sum('total') ?? 0,

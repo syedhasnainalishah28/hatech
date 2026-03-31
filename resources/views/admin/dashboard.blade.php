@@ -3,6 +3,49 @@
 @section('page_title', 'Master Dashboard')
 
 @section('content')
+<!-- System Status Row -->
+<div class="mb-12">
+    <div class="glass-card p-8 border {{ App::isDownForMaintenance() ? 'border-rose-500/30 bg-rose-500/5' : 'border-emerald-500/30 bg-emerald-500/5' }} flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="flex items-center gap-6 text-center md:text-left">
+            <div class="w-16 h-16 rounded-3xl {{ App::isDownForMaintenance() ? 'bg-rose-500/20 text-rose-400' : 'bg-emerald-500/20 text-emerald-400' }} flex items-center justify-center shadow-2xl">
+                <i data-lucide="{{ App::isDownForMaintenance() ? 'shield-off' : 'shield-check' }}" class="w-8 h-8"></i>
+            </div>
+            <div>
+                <h3 class="text-sm font-black uppercase tracking-[0.3em] text-gray-400 mb-1">System Environment</h3>
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                    <span class="text-2xl font-black uppercase tracking-tighter">
+                        @if(App::isDownForMaintenance())
+                            Maintenance Mode
+                        @else
+                            Production Live
+                        @endif
+                    </span>
+                    <span class="flex h-3 w-3 relative">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full {{ App::isDownForMaintenance() ? 'bg-rose-400' : 'bg-emerald-400' }} opacity-75"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 {{ App::isDownForMaintenance() ? 'bg-rose-500' : 'bg-emerald-500' }}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row items-center gap-6">
+            @if(App::isDownForMaintenance())
+                <a href="{{ url('/hasnain-access') }}" target="_blank" class="flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-300">Admin Bypass Link</span>
+                    <i data-lucide="external-link" class="w-4 h-4 text-[#d4a574]"></i>
+                </a>
+            @endif
+
+            <form action="{{ route('admin.maintenance.toggle') }}" method="POST">
+                @csrf
+                <button type="submit" class="px-10 py-4 {{ App::isDownForMaintenance() ? 'bg-emerald-500 text-black' : 'bg-rose-500 text-white' }} rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all">
+                    {{ App::isDownForMaintenance() ? 'Go Live' : 'Under Maintenance' }}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Stats Grid -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
     <!-- Revenue -->
