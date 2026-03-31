@@ -113,25 +113,24 @@
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            /* Direct CSS Variable drive for zero latency */
-            transform: translate3d(calc(var(--mouse-x, 0) * 1px), calc(var(--mouse-y, 0) * 1px), 0);
+            transform: translate3d(var(--mouse-x, 0), var(--mouse-y, 0), 0);
         }
         #cursor-glow-outer {
-            width: 120px;
-            height: 120px;
-            /* Using a multi-stop gradient for a natural soft glow without filter:blur */
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.35) 0%, rgba(212, 165, 116, 0.15) 30%, transparent 70%);
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.4) 0%, transparent 70%);
+            /* Using gradient for softness, minimal blur for performance */
+            filter: blur(12px);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.3;
+            opacity: 0.25;
             will-change: transform;
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            /* Smooth interpolation via lerp in JS */
-            transform: translate3d(calc(var(--glow-x, 0) * 1px - 60px), calc(var(--glow-y, 0) * 1px - 60px), 0);
+            transform: translate3d(var(--glow-x, 0), var(--glow-y, 0), 0);
         }
 
         /* Cursor States */
@@ -241,49 +240,40 @@
             const dot = document.getElementById('cursor-dot');
             const glow = document.getElementById('cursor-glow-outer');
             
-            let mouseX = 0;
-            let mouseY = 0;
-            let currentGlowX = 0;
-            let currentGlowY = 0;
-            let lastUpdate = 0;
+            let mouseX = 0, mouseY = 0;
+            let dotX = 0, dotY = 0;
+            let glowX = 0, glowY = 0;
+            
+            // Figma-grade Lerp Factors
+            const dotLerp = 0.35; 
+            const glowLerp = 0.12;
 
-            // Direct CSS Drive for the dot (Zero Latency)
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
-                
-                // Set custom variables for immediate CSS response
-                let offsetX = -4;
-                let offsetY = -4;
+            }, { passive: true });
 
-                if (body.classList.contains('cursor-text')) {
-                    offsetX = -15; offsetY = -15;
-                } else if (body.classList.contains('cursor-zoom')) {
-                    offsetX = -24; offsetY = -24;
-                } else if (body.classList.contains('cursor-pointer')) {
-                    offsetX = -20; offsetY = -10;
-                }
-
-                body.style.setProperty('--mouse-x', mouseX + offsetX);
-                body.style.setProperty('--mouse-y', mouseY + offsetY);
-
-                // Throttled target detection for performance
+            // State management on a separate throttled pulse
+            let lastUpdate = 0;
+            document.addEventListener('mousemove', (e) => {
                 const now = performance.now();
-                if (now - lastUpdate > 100) {
+                if (now - lastUpdate > 80) { // Throttled probing for performance
                     lastUpdate = now;
-                    const target = e.target;
-                    const clickable = target.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
-                    const isZoom = target.closest('.cursor-zoom-trigger');
-                    const isText = !clickable && target.closest('p, h1, h2, h3, h4, span');
+                    const clickable = e.target.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
+                    const isZoom = e.target.closest('.cursor-zoom-trigger');
+                    const isText = !clickable && e.target.closest('p, h1, h2, h3, h4, span');
 
-                    body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text', 'cursor-zoom');
-                    
                     if (isZoom) {
                         body.classList.add('cursor-zoom', 'cursor-hover');
+                        body.classList.remove('cursor-pointer', 'cursor-text');
                     } else if (clickable) {
                         body.classList.add('cursor-pointer', 'cursor-hover');
-                    } else if (isText && target.innerText.trim().length > 0) {
+                        body.classList.remove('cursor-text', 'cursor-zoom');
+                    } else if (isText && e.target.innerText.trim().length > 0) {
                         body.classList.add('cursor-text');
+                        body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-zoom');
+                    } else {
+                        body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text', 'cursor-zoom');
                     }
                 }
             }, { passive: true });
@@ -291,17 +281,32 @@
             document.addEventListener('mousedown', () => body.classList.add('is-clicking'));
             document.addEventListener('mouseup', () => body.classList.remove('is-clicking'));
 
-            const animateGlow = () => {
-                const lerpFactor = 0.12;
-                currentGlowX += (mouseX - currentGlowX) * lerpFactor;
-                currentGlowY += (mouseY - currentGlowY) * lerpFactor;
+            const tick = () => {
+                // Calculate Lerps
+                dotX += (mouseX - dotX) * dotLerp;
+                dotY += (mouseY - dotY) * dotLerp;
+                glowX += (mouseX - glowX) * glowLerp;
+                glowY += (mouseY - glowY) * glowLerp;
 
-                body.style.setProperty('--glow-x', currentGlowX);
-                body.style.setProperty('--glow-y', currentGlowY);
+                // Dynamic Offsets Based on State
+                let dotOffX = -4, dotOffY = -4;
+                if (body.classList.contains('cursor-text')) {
+                    dotOffX = -15; dotOffY = -15;
+                } else if (body.classList.contains('cursor-zoom')) {
+                    dotOffX = -24; dotOffY = -24;
+                } else if (body.classList.contains('cursor-pointer')) {
+                    dotOffX = -20; dotOffY = -10;
+                }
 
-                requestAnimationFrame(animateGlow);
+                // Smooth CSS Injections
+                document.documentElement.style.setProperty('--mouse-x', `${(dotX + dotOffX).toFixed(2)}px`);
+                document.documentElement.style.setProperty('--mouse-y', `${(dotY + dotOffY).toFixed(2)}px`);
+                document.documentElement.style.setProperty('--glow-x', `${(glowX - 40).toFixed(2)}px`);
+                document.documentElement.style.setProperty('--glow-y', `${(glowY - 40).toFixed(2)}px`);
+
+                requestAnimationFrame(tick);
             };
-            animateGlow();
+            tick();
 
             const nav = document.getElementById('main-nav');
             window.addEventListener('scroll', () => {
