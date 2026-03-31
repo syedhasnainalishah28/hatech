@@ -176,15 +176,15 @@
 </div>
 
 <!-- Lightbox Modal -->
-<div id="lightbox" class="fixed inset-0 z-[10000] bg-black/95 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-500 flex items-center justify-center p-4 md:p-8" onclick="closeLightbox()">
+<div id="lightbox" class="fixed inset-0 z-[10000] bg-black/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-500 grid place-items-center p-4 md:p-12" onclick="closeLightbox()">
     <!-- Close Icon -->
     <button class="absolute top-10 right-10 text-white/40 hover:text-white transition-colors z-[10001]">
         <i data-lucide="x" class="w-10 h-10"></i>
     </button>
     
-    <!-- Unified Content Container -->
-    <div id="lightbox-content" class="relative max-w-full max-h-full flex items-center justify-center transition-all duration-500 scale-95 opacity-0" onclick="event.stopPropagation()">
-        <!-- Dynamic Image/Video Injected Here -->
+    <!-- Content Wrapper -->
+    <div id="lightbox-content" class="relative max-w-full max-h-full transition-all duration-500 scale-90 opacity-0" onclick="event.stopPropagation()">
+        <!-- Image/Video injected here -->
     </div>
 </div>
 
@@ -216,10 +216,10 @@
     }
     
     #lightbox-content img, #lightbox-content iframe {
-        box-shadow: 0 60px 120px -30px rgba(0,0,0,0.8);
+        box-shadow: 0 80px 160px -40px rgba(0,0,0,0.9);
         border-radius: 32px;
-        max-width: 95vw;
-        max-height: 90vh; /* Strictly contained within viewport */
+        max-width: 90vw;
+        max-height: 80vh; /* Strict height to ensure vertical centering room */
         object-fit: contain;
         display: block;
         margin: auto;
@@ -234,7 +234,7 @@
 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 <script>
     function openLightbox(type, src) {
-        if (!src || src.includes('undefined')) return;
+        if (!src || src === '' || src.includes('undefined')) return;
 
         const lightbox = document.getElementById('lightbox');
         const content = document.getElementById('lightbox-content');
@@ -242,9 +242,9 @@
         content.innerHTML = '';
         
         if (type === 'image') {
-            content.innerHTML = `<img src="${src}" class="reveal-in shadow-3xl">`;
+            content.innerHTML = `<img src="${src}" class="shadow-4xl">`;
         } else if (type === 'video') {
-            content.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 shadow-3xl" allowfullscreen></iframe>`;
+            content.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 shadow-4xl" allowfullscreen></iframe>`;
         }
 
         lightbox.classList.add('active');
@@ -260,7 +260,7 @@
         }, 500);
     }
 
-    // Escape listener
+    // Escape Key Support
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeLightbox();
     });
