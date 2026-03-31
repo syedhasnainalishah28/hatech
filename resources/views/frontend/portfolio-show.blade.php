@@ -228,10 +228,11 @@
         const content = document.getElementById('lightbox-content');
         content.innerHTML = '';
 
+        // Removed reveal-up active classes to prevent jumping/misalignment
         if (type === 'image') {
-            content.innerHTML = `<img src="${src}" class="reveal-up active">`;
+            content.innerHTML = `<img src="${src}" class="max-w-full max-h-[85vh] rounded-[24px] shadow-2xl">`;
         } else if (type === 'video') {
-            content.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 reveal-up active" allowfullscreen></iframe>`;
+            content.innerHTML = `<iframe src="${src}" class="w-full aspect-video border-0 rounded-[24px] shadow-2xl" allowfullscreen></iframe>`;
         }
 
         lightbox.classList.add('active');
@@ -244,13 +245,8 @@
         document.body.style.overflow = '';
         setTimeout(() => {
             document.getElementById('lightbox-content').innerHTML = '';
-        }, 500);
+        }, 300);
     }
-
-    // Close on Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeLightbox();
-    });
 </script>
 @endpush
 @endsection

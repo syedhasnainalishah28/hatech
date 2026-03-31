@@ -113,24 +113,25 @@
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            transform: translate3d(0,0,0);
+            /* Direct CSS Variable drive for zero latency */
+            transform: translate3d(calc(var(--mouse-x, 0) * 1px), calc(var(--mouse-y, 0) * 1px), 0);
         }
         #cursor-glow-outer {
-            width: 80px;
-            height: 80px;
-            background: radial-gradient(circle, rgba(212, 165, 116, 0.4) 0%, transparent 70%);
-            /* Reduced blur for performance, using gradient for softness */
-            filter: blur(15px);
+            width: 120px;
+            height: 120px;
+            /* Using a multi-stop gradient for a natural soft glow without filter:blur */
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.35) 0%, rgba(212, 165, 116, 0.15) 30%, transparent 70%);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
             z-index: 9999;
-            opacity: 0.25;
+            opacity: 0.3;
             will-change: transform;
             top: 0;
             left: 0;
             backface-visibility: hidden;
-            transform: translate3d(0,0,0);
+            /* Smooth interpolation via lerp in JS */
+            transform: translate3d(calc(var(--glow-x, 0) * 1px - 60px), calc(var(--glow-y, 0) * 1px - 60px), 0);
         }
 
         /* Cursor States */
@@ -153,10 +154,10 @@
         }
 
         .cursor-hover #cursor-glow-outer {
-            width: 120px;
-            height: 120px;
+            width: 180px;
+            height: 180px;
             opacity: 0.5;
-            filter: blur(20px);
+            background: radial-gradient(circle, rgba(212, 165, 116, 0.45) 0%, rgba(212, 165, 116, 0.2) 40%, transparent 70%);
         }
 
         #main-content.modal-active {
@@ -242,22 +243,38 @@
             
             let mouseX = 0;
             let mouseY = 0;
-            let dotX = 0;
-            let dotY = 0;
-            let glowX = 0;
-            let glowY = 0;
+            let currentGlowX = 0;
+            let currentGlowY = 0;
+            let lastUpdate = 0;
 
-            let lastTarget = null;
-            // Use a light check on every target change
+            // Direct CSS Drive for the dot (Zero Latency)
             document.addEventListener('mousemove', (e) => {
                 mouseX = e.clientX;
                 mouseY = e.clientY;
                 
-                if (e.target !== lastTarget) {
-                    lastTarget = e.target;
-                    const clickable = lastTarget.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
-                    const isZoom = lastTarget.closest('.cursor-zoom-trigger');
-                    const isText = !clickable && lastTarget.closest('p, h1, h2, h3, h4, span');
+                // Set custom variables for immediate CSS response
+                let offsetX = -4;
+                let offsetY = -4;
+
+                if (body.classList.contains('cursor-text')) {
+                    offsetX = -15; offsetY = -15;
+                } else if (body.classList.contains('cursor-zoom')) {
+                    offsetX = -24; offsetY = -24;
+                } else if (body.classList.contains('cursor-pointer')) {
+                    offsetX = -20; offsetY = -10;
+                }
+
+                body.style.setProperty('--mouse-x', mouseX + offsetX);
+                body.style.setProperty('--mouse-y', mouseY + offsetY);
+
+                // Throttled target detection for performance
+                const now = performance.now();
+                if (now - lastUpdate > 100) {
+                    lastUpdate = now;
+                    const target = e.target;
+                    const clickable = target.closest('a, button, .group, [role="button"], .cursor-zoom-trigger');
+                    const isZoom = target.closest('.cursor-zoom-trigger');
+                    const isText = !clickable && target.closest('p, h1, h2, h3, h4, span');
 
                     body.classList.remove('cursor-pointer', 'cursor-hover', 'cursor-text', 'cursor-zoom');
                     
@@ -265,7 +282,7 @@
                         body.classList.add('cursor-zoom', 'cursor-hover');
                     } else if (clickable) {
                         body.classList.add('cursor-pointer', 'cursor-hover');
-                    } else if (isText && lastTarget.innerText.trim().length > 0) {
+                    } else if (isText && target.innerText.trim().length > 0) {
                         body.classList.add('cursor-text');
                     }
                 }
@@ -274,46 +291,17 @@
             document.addEventListener('mousedown', () => body.classList.add('is-clicking'));
             document.addEventListener('mouseup', () => body.classList.remove('is-clicking'));
 
-            const animateCursor = () => {
-                const dotSpeed = 0.35; 
-                const glowSpeed = 0.12;
+            const animateGlow = () => {
+                const lerpFactor = 0.12;
+                currentGlowX += (mouseX - currentGlowX) * lerpFactor;
+                currentGlowY += (mouseY - currentGlowY) * lerpFactor;
 
-                dotX += (mouseX - dotX) * dotSpeed;
-                dotY += (mouseY - dotY) * dotSpeed;
-                glowX += (mouseX - glowX) * glowSpeed;
-                glowY += (mouseY - glowY) * glowSpeed;
+                body.style.setProperty('--glow-x', currentGlowX);
+                body.style.setProperty('--glow-y', currentGlowY);
 
-                if(dot) {
-                    let offsetX = -4;
-                    let offsetY = -4;
-                    let origin = '0 0'; // Default tip for pointer
-                    let scaleValue = body.classList.contains('is-clicking') ? 0.85 : 1;
-
-                    if (body.classList.contains('cursor-text')) {
-                        offsetX = -15; 
-                        offsetY = -15;
-                        origin = '50% 50%';
-                    } else if (body.classList.contains('cursor-zoom')) {
-                        offsetX = -24; 
-                        offsetY = -24;
-                        origin = '50% 50%';
-                    } else if (body.classList.contains('cursor-pointer')) {
-                        offsetX = -20; 
-                        offsetY = -10;
-                        origin = '50% 50%'; // Hand centers better
-                    }
-
-                    dot.style.transformOrigin = origin;
-                    dot.style.transform = `translate3d(${dotX + offsetX}px, ${dotY + offsetY}px, 0) scale(${scaleValue})`;
-                }
-                
-                if(glow) {
-                    glow.style.transform = `translate3d(${glowX - 35}px, ${glowY - 35}px, 0) rotate(${(glowX + glowY) * 0.1}deg)`;
-                }
-
-                requestAnimationFrame(animateCursor);
+                requestAnimationFrame(animateGlow);
             };
-            animateCursor();
+            animateGlow();
 
             const nav = document.getElementById('main-nav');
             window.addEventListener('scroll', () => {
