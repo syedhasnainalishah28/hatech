@@ -7,6 +7,7 @@ use App\Models\Portfolio;
 use App\Models\Testimonial;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\TeamMember;
 use App\Models\SitePage;
 use App\Models\Order;
 use App\Models\ServiceOrder;
@@ -541,5 +542,86 @@ class AdminController extends Controller
         $service = \App\Models\Service::findOrFail($id);
         $service->delete();
         return redirect()->route('admin.services')->with('success', 'Service deleted successfully.');
+    }
+
+    // --- Team Members ---
+    public function teamIndex()
+    {
+        $members = TeamMember::orderBy('sort_order')->paginate(10);
+        return view('admin.team.index', compact('members'));
+    }
+
+    public function teamCreate()
+    {
+        return view('admin.team.create');
+    }
+
+    public function teamStore(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'gradient' => 'required|string|max:255',
+            'image_path' => 'nullable|image|max:2048',
+            'linkedin_url' => 'nullable|string',
+            'twitter_url' => 'nullable|string',
+            'email' => 'nullable|string',
+            'sort_order' => 'required|integer'
+        ]);
+
+        $data['is_active'] = $request->has('is_active');
+
+        if ($request->hasFile('image_path')) {
+            $data['image_path'] = $request->file('image_path')->store('team', 'public');
+        }
+
+        TeamMember::create($data);
+
+        return redirect()->route('admin.team')->with('success', 'Team member added successfully.');
+    }
+
+    public function teamEdit($id)
+    {
+        $member = TeamMember::findOrFail($id);
+        return view('admin.team.edit', compact('member'));
+    }
+
+    public function teamUpdate(Request $request, $id)
+    {
+        $member = TeamMember::findOrFail($id);
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => 'required|string|max:255',
+            'gradient' => 'required|string|max:255',
+            'image_path' => 'nullable|image|max:2048',
+            'linkedin_url' => 'nullable|string',
+            'twitter_url' => 'nullable|string',
+            'email' => 'nullable|string',
+            'sort_order' => 'required|integer'
+        ]);
+
+        $data['is_active'] = $request->has('is_active');
+
+        if ($request->hasFile('image_path')) {
+            if ($member->image_path) {
+                Storage::disk('public')->delete($member->image_path);
+            }
+            $data['image_path'] = $request->file('image_path')->store('team', 'public');
+        }
+
+        $member->update($data);
+
+        return redirect()->route('admin.team')->with('success', 'Team member updated successfully.');
+    }
+
+    public function teamDestroy($id)
+    {
+        $member = TeamMember::findOrFail($id);
+        if ($member->image_path) {
+            Storage::disk('public')->delete($member->image_path);
+        }
+        $member->delete();
+        return redirect()->route('admin.team')->with('success', 'Team member deleted successfully.');
     }
 }

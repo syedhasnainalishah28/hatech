@@ -41,7 +41,7 @@
                     <label class="block text-xs font-bold text-[#d4a574] uppercase tracking-widest mb-2 ml-1">Full Name</label>
                     <div class="relative group">
                         <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500 group-focus-within:text-[#d4a574] transition-colors"></i>
-                        <input type="text" name="name" placeholder="John Doe" class="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-gray-600 focus:outline-none focus:border-[#d4a574] transition-all" required>
+                        <input type="text" name="name" placeholder="Your Name" class="w-full pl-12 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-gray-600 focus:outline-none focus:border-[#d4a574] transition-all" required>
                     </div>
                 </div>
 
@@ -72,12 +72,12 @@
                     <span class="absolute px-3 bg-[#0a0506] text-[10px] font-bold text-gray-500 uppercase tracking-widest">Or Evolution via</span>
                 </div>
                 <div class="mt-6 grid grid-cols-2 gap-4">
-                    <button class="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold hover:bg-white/10 transition-all text-xs group">
-                        <img src="https://www.google.com/favicon.ico" class="w-4 h-4" alt=""> Google
-                    </button>
-                    <button class="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold hover:bg-white/10 transition-all text-xs group">
+                    <a href="{{ route('social.redirect', 'google') }}" class="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold hover:bg-white/10 transition-all text-xs group">
+                        <img src="{{ asset('images/google-icon.svg') }}" onerror="this.src='https://www.google.com/favicon.ico'" class="w-4 h-4" alt="Google"> Google
+                    </a>
+                    <a href="{{ route('social.redirect', 'github') }}" class="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold hover:bg-white/10 transition-all text-xs group">
                         <i data-lucide="github" class="w-4 h-4 text-[#d4a574]"></i> GitHub
-                    </button>
+                    </a>
                 </div>
             </div>
 

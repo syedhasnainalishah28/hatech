@@ -23,39 +23,51 @@
             @if($posts->count() > 0)
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($posts as $post)
-                        <article class="reveal-up group">
-                            <div class="relative bg-white/[0.03] border border-white/10 rounded-[2.5rem] overflow-hidden hover:bg-white/[0.05] transition-all duration-500 h-full flex flex-col">
-                                <!-- Image Placeholder / Thumbnail -->
-                                <div class="relative aspect-[16/10] overflow-hidden">
-                                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-                                    <img src="{{ $post->thumbnail ?? asset('images/blog-placeholder.jpg') }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                    <div class="absolute top-4 left-4 z-20">
-                                        <span class="px-4 py-1.5 rounded-full bg-[#d4a574] text-[#2b0e14] text-xs font-bold uppercase tracking-widest">
-                                            {{ $post->category ?? 'Tech' }}
+                        <article class="reveal-up group h-full">
+                            <a href="{{ route('blog.single', $post->slug) }}" class="block relative bg-white/[0.03] border border-white/10 rounded-[2.5rem] overflow-hidden hover:bg-white/[0.08] transition-all duration-500 h-full flex flex-col group/card shadow-2xl">
+                                
+                                <!-- Thumbnail -->
+                                <div class="relative aspect-[16/10] overflow-hidden bg-[#0a0506]">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-[#0a0506] to-transparent z-10 opacity-80"></div>
+                                    @if($post->thumbnail)
+                                        <img src="{{ asset('storage/' . $post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-700 ease-out">
+                                    @endif
+                                    
+                                    @if($post->category)
+                                    <div class="absolute top-6 left-6 z-20">
+                                        <span class="px-4 py-2 rounded-full border text-[10px] font-black uppercase tracking-widest backdrop-blur-md" style="border-color: {{ $post->category->color ?? '#d4a574' }}; color: {{ $post->category->color ?? '#d4a574' }}; background: rgba(0,0,0,0.5);">
+                                            {{ $post->category->name }}
                                         </span>
                                     </div>
+                                    @endif
                                 </div>
                                 
                                 <div class="p-8 flex flex-col flex-grow">
-                                    <div class="flex items-center gap-4 text-gray-500 text-xs mb-4 uppercase tracking-widest font-bold">
-                                        <span>{{ $post->created_at->format('M d, Y') }}</span>
-                                        <span class="w-1 h-1 rounded-full bg-[#d4a574]"></span>
-                                        <span>5 min read</span>
+                                    <div class="flex items-center gap-4 text-gray-500 text-[10px] uppercase tracking-[0.2em] font-black mb-5">
+                                        <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-3 h-3 text-[#d4a574]"></i> {{ $post->published_at ? $post->published_at->format('M d, Y') : $post->created_at->format('M d, Y') }}</span>
+                                        <span class="w-1 h-1 rounded-full bg-white/20"></span>
+                                        <span class="flex items-center gap-1"><i data-lucide="clock" class="w-3 h-3 text-[#d4a574]"></i> {{ $post->read_time ?? 5 }} min read</span>
                                     </div>
-                                    <h3 class="text-2xl font-bold text-white mb-4 group-hover:text-[#d4a574] transition-colors leading-tight">
+                                    
+                                    <h3 class="text-2xl font-black text-white mb-4 group-hover/card:text-[#d4a574] transition-colors leading-tight tracking-tight">
                                         {{ $post->title }}
                                     </h3>
-                                    <p class="text-gray-400 text-sm line-clamp-3 mb-8">
-                                        {{ Str::limit(strip_tags($post->content), 120) }}
+                                    
+                                    <p class="text-gray-400 text-sm line-clamp-3 mb-8 leading-relaxed">
+                                        {{ $post->excerpt ?: Str::limit(strip_tags($post->body), 150) }}
                                     </p>
+                                    
                                     <div class="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
-                                        <a href="{{ url('/blogs/'.$post->slug) }}" class="text-[#d4a574] font-bold text-sm tracking-widest uppercase flex items-center gap-2 group/btn">
-                                            Read Article
-                                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover/btn:translate-x-1 transition-transform"></i>
-                                        </a>
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-white font-bold text-xs border border-white/10 uppercase">{{ substr($post->author->name, 0, 1) }}</div>
+                                            <span class="text-xs font-bold text-gray-300 uppercase tracking-widest">{{ $post->author->name }}</span>
+                                        </div>
+                                        <div class="text-[#d4a574] font-bold text-[10px] tracking-widest uppercase flex items-center gap-2 group-hover/card:translate-x-1 transition-transform">
+                                            Read Mode <i data-lucide="arrow-right" class="w-3 h-3"></i>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </article>
                     @endforeach
                 </div>

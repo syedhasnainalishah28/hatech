@@ -8,9 +8,12 @@ Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/services', [FrontendController::class, 'services']);
 Route::get('/work', [FrontendController::class, 'work']);
 Route::get('/work/{id}', [FrontendController::class, 'portfolioShow'])->name('portfolio.show');
-Route::get('/blogs', [FrontendController::class, 'blogs']);
+Route::get('/blogs', [FrontendController::class, 'blogs'])->name('blogs');
+Route::get('/blogs/{slug}', [FrontendController::class, 'blogSingle'])->name('blog.single');
+Route::get('/sitemap.xml', [FrontendController::class, 'sitemap'])->name('sitemap');
 
 Route::get('/about', [FrontendController::class, 'about']);
+Route::get('/team', [FrontendController::class, 'team']);
 Route::get('/about/founder', [FrontendController::class, 'founder']);
 Route::get('/about/ceo', [FrontendController::class, 'ceo']);
 Route::get('/products', [FrontendController::class, 'products']);
@@ -24,6 +27,11 @@ Route::post('/login', [FrontendController::class, 'postLogin']);
 Route::get('/signup', [FrontendController::class, 'signup'])->name('signup');
 Route::post('/signup', [FrontendController::class, 'postSignup']);
 Route::post('/logout', [FrontendController::class, 'logout'])->name('logout');
+
+// Social Auth
+use App\Http\Controllers\SocialAuthController;
+Route::get('/auth/{provider}', [SocialAuthController::class, 'redirectToProvider'])->name('social.redirect');
+Route::get('/auth/{provider}/callback', [SocialAuthController::class, 'handleProviderCallback'])->name('social.callback');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/dashboard', [FrontendController::class, 'userDashboard'])->name('user.dashboard');
@@ -101,4 +109,25 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/services-catalog/{id}/edit', [AdminController::class, 'serviceEdit'])->name('admin.services.edit');
     Route::post('/services-catalog/{id}', [AdminController::class, 'serviceUpdate'])->name('admin.services.update');
     Route::delete('/services-catalog/{id}', [AdminController::class, 'serviceDestroy'])->name('admin.services.destroy');
+
+    // Team Members
+    Route::get('/team', [AdminController::class, 'teamIndex'])->name('admin.team');
+    Route::get('/team/create', [AdminController::class, 'teamCreate'])->name('admin.team.create');
+    Route::post('/team', [AdminController::class, 'teamStore'])->name('admin.team.store');
+    Route::get('/team/{id}/edit', [AdminController::class, 'teamEdit'])->name('admin.team.edit');
+    Route::post('/team/{id}', [AdminController::class, 'teamUpdate'])->name('admin.team.update');
+    Route::delete('/team/{id}', [AdminController::class, 'teamDestroy'])->name('admin.team.destroy');
+
+    // SEO Blog Module
+    Route::get('/blog/categories', [\App\Http\Controllers\AdminBlogController::class, 'categoriesIndex'])->name('admin.blog.categories');
+    Route::post('/blog/categories', [\App\Http\Controllers\AdminBlogController::class, 'categoriesStore'])->name('admin.blog.categories.store');
+    Route::post('/blog/categories/{id}', [\App\Http\Controllers\AdminBlogController::class, 'categoriesUpdate'])->name('admin.blog.categories.update');
+    Route::delete('/blog/categories/{id}', [\App\Http\Controllers\AdminBlogController::class, 'categoriesDestroy'])->name('admin.blog.categories.destroy');
+
+    Route::get('/blog/posts', [\App\Http\Controllers\AdminBlogController::class, 'postsIndex'])->name('admin.blog.posts');
+    Route::get('/blog/posts/create', [\App\Http\Controllers\AdminBlogController::class, 'postsCreate'])->name('admin.blog.posts.create');
+    Route::post('/blog/posts', [\App\Http\Controllers\AdminBlogController::class, 'postsStore'])->name('admin.blog.posts.store');
+    Route::get('/blog/posts/{id}/edit', [\App\Http\Controllers\AdminBlogController::class, 'postsEdit'])->name('admin.blog.posts.edit');
+    Route::post('/blog/posts/{id}', [\App\Http\Controllers\AdminBlogController::class, 'postsUpdate'])->name('admin.blog.posts.update');
+    Route::delete('/blog/posts/{id}', [\App\Http\Controllers\AdminBlogController::class, 'postsDestroy'])->name('admin.blog.posts.destroy');
 });

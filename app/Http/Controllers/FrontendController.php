@@ -47,9 +47,37 @@ class FrontendController extends Controller
     
     public function blogs() 
     { 
-        $posts = BlogPost::where('status', 'published')->latest()->paginate(9);
-        if ($posts->isEmpty()) $posts = BlogPost::latest()->paginate(9);
+        $posts = BlogPost::with('author', 'category')
+                        ->where('status', 'published')
+                        ->orderByDesc('published_at')
+                        ->paginate(9);
         return view('frontend.blogs', compact('posts')); 
+    }
+
+    public function blogSingle($slug)
+    {
+        $post = BlogPost::with('author', 'category')
+                        ->where('slug', $slug)
+                        ->where('status', 'published')
+                        ->firstOrFail();
+        return view('frontend.blog-single', compact('post'));
+    }
+
+    public function sitemap()
+    {
+        $posts = BlogPost::where('status', 'published')->orderByDesc('published_at')->get();
+        $portfolios = Portfolio::latest()->get();
+        // Return view as XML
+        return response()->view('frontend.sitemap', [
+            'posts' => $posts,
+            'portfolios' => $portfolios
+        ])->header('Content-Type', 'text/xml');
+    }
+
+    public function team()
+    {
+        $team = \App\Models\TeamMember::where('is_active', true)->orderBy('sort_order')->get();
+        return view('frontend.team', compact('team'));
     }
     
     public function about() 

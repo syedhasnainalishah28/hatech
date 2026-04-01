@@ -54,6 +54,12 @@
                                 </div>
                                 <span class="font-medium tracking-wide">About Us</span>
                             </a>
+                            <a href="{{ url('/team') }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-[#d4a574] hover:bg-white/5 transition-all group/item">
+                                <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover/item:bg-[#d4a574]/20 transition-colors">
+                                    <i data-lucide="users" class="w-4 h-4"></i>
+                                </div>
+                                <span class="font-medium tracking-wide">Our Team</span>
+                            </a>
                             <a href="{{ url('/about/founder') }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-[#d4a574] hover:bg-white/5 transition-all group/item">
                                 <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover/item:bg-[#d4a574]/20 transition-colors">
                                     <i data-lucide="user" class="w-4 h-4"></i>
@@ -176,6 +182,12 @@
                     <i data-lucide="info" class="w-4 h-4"></i>
                 </div>
                 <span class="font-medium">About Us</span>
+            </a>
+            <a href="{{ url('/team') }}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-[#d4a574] hover:bg-white/5 transition-all group">
+                <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#d4a574]/10 transition-colors">
+                    <i data-lucide="users" class="w-4 h-4"></i>
+                </div>
+                <span class="font-medium">Our Team</span>
             </a>
             <a href="{{ url('/about/founder') }}" class="sidebar-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:text-[#d4a574] hover:bg-white/5 transition-all group">
                 <div class="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[#d4a574]/10 transition-colors">

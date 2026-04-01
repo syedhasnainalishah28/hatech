@@ -87,6 +87,10 @@
             <a href="{{ route('admin.services') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 font-medium {{ request()->routeIs('admin.services*') ? 'active' : '' }}">
                 <i data-lucide="layers" class="w-5 h-5"></i> Services Catalog
             </a>
+
+            <a href="{{ route('admin.team') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 font-medium {{ request()->routeIs('admin.team*') ? 'active' : '' }}">
+                <i data-lucide="users-2" class="w-5 h-5"></i> Team Members
+            </a>
             
             <a href="{{ route('admin.pages') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 font-medium {{ request()->routeIs('admin.pages*') ? 'active' : '' }}">
                 <i data-lucide="layout" class="w-5 h-5"></i> Site Pages
@@ -94,6 +98,14 @@
 
             <a href="{{ route('admin.users') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 font-medium {{ request()->routeIs('admin.users*') ? 'active' : '' }}">
                 <i data-lucide="users" class="w-5 h-5"></i> Users
+            </a>
+
+            <p class="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 mt-6 mb-4">Blog & Content</p>
+            <a href="{{ route('admin.blog.categories') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 font-medium {{ request()->routeIs('admin.blog.categories*') ? 'active' : '' }}">
+                <i data-lucide="folder-tree" class="w-5 h-5"></i> Categories
+            </a>
+            <a href="{{ route('admin.blog.posts') }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 font-medium {{ request()->routeIs('admin.blog.posts*') ? 'active' : '' }}">
+                <i data-lucide="file-text" class="w-5 h-5"></i> Posts (SEO)
             </a>
 
             <p class="px-4 text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 mt-6 mb-4">Marketing</p>

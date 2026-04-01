@@ -8,7 +8,8 @@ class BlogPost extends Model
 {
     protected $fillable = [
         'category_id', 'author_id', 'title', 'slug', 'excerpt',
-        'body', 'thumbnail', 'status', 'read_time', 'published_at',
+        'body', 'thumbnail', 'status', 'meta_title', 'meta_description',
+        'focus_keyword', 'canonical_url', 'read_time', 'published_at',
     ];
 
     protected function casts(): array

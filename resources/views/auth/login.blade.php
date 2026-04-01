@@ -64,6 +64,21 @@
                 </span>
             </button>
 
+            <div class="mt-8">
+                <div class="relative flex items-center justify-center">
+                    <div class="w-full border-t border-white/5"></div>
+                    <span class="absolute px-3 bg-[#1a0f11] text-[10px] font-bold text-gray-500 uppercase tracking-widest">Or Login With</span>
+                </div>
+                <div class="mt-6 grid grid-cols-2 gap-4">
+                    <a href="{{ route('social.redirect', 'google') }}" class="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold hover:bg-white/10 transition-all text-xs group">
+                        <img src="{{ asset('images/google-icon.svg') }}" onerror="this.src='https://www.google.com/favicon.ico'" class="w-4 h-4" alt="Google"> Google
+                    </a>
+                    <a href="{{ route('social.redirect', 'github') }}" class="flex items-center justify-center gap-3 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white font-bold hover:bg-white/10 transition-all text-xs group">
+                        <i data-lucide="github" class="w-4 h-4 text-[#d4a574]"></i> GitHub
+                    </a>
+                </div>
+            </div>
+
             <p class="text-center text-xs text-gray-500 mt-6 uppercase tracking-widest font-bold">
                 Don't have an account? <a href="{{ url('/signup') }}" class="text-white hover:text-[#d4a574] transition-colors border-b border-[#d4a574]/30">Create one</a>
             </p>

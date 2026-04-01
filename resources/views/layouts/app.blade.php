@@ -7,6 +7,9 @@
     <!-- SEO -->
     <title>@yield('title', 'HA Tech | Gen Z Evolution')</title>
     <meta name="description" content="@yield('meta_description', 'High-end digital agency shaping the future through innovation and design.')">
+    @yield('canonical_url')
+    @yield('og_tags')
+    
     
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
