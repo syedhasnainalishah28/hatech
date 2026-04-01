@@ -131,3 +131,14 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::post('/blog/posts/{id}', [\App\Http\Controllers\AdminBlogController::class, 'postsUpdate'])->name('admin.blog.posts.update');
     Route::delete('/blog/posts/{id}', [\App\Http\Controllers\AdminBlogController::class, 'postsDestroy'])->name('admin.blog.posts.destroy');
 });
+
+// TEMPORARY: Database Migration Utility for Shared Hosting
+// Visit: /run-migrations and then DELETE THIS ROUTE for security.
+Route::get('/run-migrations', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return "<h1>HA Tech | Migration Center</h1><p style='color: green;'>Database updated successfully! ✅</p><p>Check your site now. <b>Don't forget to delete this route from web.php!</b></p>";
+    } catch (\Exception $e) {
+        return "<h1>Migration Error</h1><pre>" . $e->getMessage() . "</pre>";
+    }
+});
