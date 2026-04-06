@@ -24,7 +24,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     @foreach($posts as $post)
                         <article class="reveal-up group h-full">
-                            <a href="{{ route('blog.single', $post->slug) }}" class="block relative bg-white/[0.03] border border-white/10 rounded-[2.5rem] overflow-hidden hover:bg-white/[0.08] transition-all duration-500 h-full flex flex-col group/card shadow-2xl">
+                            <a href="{{ route('blog.single', $post->slug) }}" class="block relative bg-white/[0.03] border border-white/10 rounded-2xl overflow-hidden hover:bg-white/[0.08] transition-all duration-500 h-full flex flex-col group/card shadow-2xl">
                                 
                                 <!-- Thumbnail -->
                                 <div class="relative aspect-[16/10] overflow-hidden bg-[#0a0506]">
@@ -88,7 +88,7 @@
 
     <!-- NEWSLETTER -->
     <section class="py-20 px-4 border-t border-white/5 bg-white/[0.01]">
-        <div class="max-w-4xl mx-auto rounded-[3rem] p-12 bg-gradient-to-br from-[#1a0f11] to-[#0a0506] border border-[#d4a574]/20 text-center relative overflow-hidden">
+        <div class="max-w-4xl mx-auto rounded-[2rem] p-12 bg-gradient-to-br from-[#1a0f11] to-[#0a0506] border border-[#d4a574]/20 text-center relative overflow-hidden">
             <div class="absolute top-0 right-0 w-64 h-64 bg-[#d4a574]/5 blur-[100px] -z-10"></div>
             <h2 class="text-3xl font-bold text-white mb-4">Join the Inner Circle</h2>
             <p class="text-gray-400 mb-8">Get exclusive insights delivered directly to your inbox. No spam, just pure value.</p>

@@ -14,7 +14,7 @@
             border-color: rgba(255,255,255,0.1);
             background: rgba(10,5,6,0.5);
             border-radius: 0 0 1rem 1rem;
-            min-height: 400px;
+            min-height: 600px;
             font-size: 16px;
             color: #fff;
         }
@@ -77,7 +77,7 @@
                         <span class="text-[8px] text-gray-500 font-normal normal-case tracking-normal">Quill Premium Editor Powered</span>
                     </label>
                     <div id="editor-container" class="bg-[#0a0506] border border-white/10 rounded-xl overflow-hidden">
-                        <div id="editor" style="height: 400px;">{!! old('body', $post->body) !!}</div>
+                        <div id="editor" style="height: 600px;">{!! old('body', $post->body) !!}</div>
                     </div>
                     <input type="hidden" name="body" id="body-input">
                 </div>
@@ -174,6 +174,51 @@
                     </div>
                 </div>
             </div>
+
+            <!-- OJS Sidebar Controls -->
+            <div class="glass-card p-6 border border-amber-500/20 rounded-3xl bg-amber-500/5">
+                <h4 class="text-sm font-black uppercase tracking-widest text-amber-400 mb-6 border-b border-amber-500/10 pb-4 flex items-center gap-2">
+                    <i data-lucide="layout-columns" class="w-4 h-4"></i> OJS Layout Engine
+                </h4>
+                
+                <div class="space-y-8">
+                    <!-- Left Sidebar -->
+                    <div class="p-4 rounded-2xl bg-black/40 border border-white/5">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-white">Left Sidebar</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="sidebar_left_show" value="1" @checked($post->sidebar_left_show) class="sr-only peer">
+                                <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                            </label>
+                        </div>
+                        <div class="space-y-4">
+                            <select name="sidebar_left_type" onchange="toggleSidebarContent('left', this.value)" class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2 text-xs text-gray-300 focus:outline-none">
+                                <option value="standard" @selected($post->sidebar_left_type == 'standard')>Standard (Author & Info)</option>
+                                <option value="custom" @selected($post->sidebar_left_type == 'custom')>Custom (Image/HTML)</option>
+                            </select>
+                            <textarea id="left-content-area" name="sidebar_left_content" rows="3" class="{{ $post->sidebar_left_type == 'custom' ? '' : 'hidden' }} w-full bg-black/80 border border-white/10 rounded-xl px-4 py-3 text-xs text-gray-400 focus:outline-none" placeholder="Paste Small Image URL or Custom Links HTML...">{{ $post->sidebar_left_content }}</textarea>
+                        </div>
+                    </div>
+
+                    <!-- Right Sidebar -->
+                    <div class="p-4 rounded-2xl bg-black/40 border border-white/5">
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="text-[10px] font-black uppercase tracking-widest text-white">Right Sidebar</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="sidebar_right_show" value="1" @checked($post->sidebar_right_show) class="sr-only peer">
+                                <div class="w-11 h-6 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-gray-300 after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-amber-500"></div>
+                            </label>
+                        </div>
+                        <div class="space-y-4">
+                            <select name="sidebar_right_type" onchange="toggleSidebarContent('right', this.value)" class="w-full bg-black/60 border border-white/10 rounded-xl px-4 py-2 text-xs text-gray-300 focus:outline-none">
+                                <option value="standard" @selected($post->sidebar_right_type == 'standard')>Standard (Share & Related)</option>
+                                <option value="custom" @selected($post->sidebar_right_type == 'custom')>Custom (Buttons/Ad)</option>
+                            </select>
+                            <textarea id="right-content-area" name="sidebar_right_content" rows="3" class="{{ $post->sidebar_right_type == 'custom' ? '' : 'hidden' }} w-full bg-black/80 border border-white/10 rounded-xl px-4 py-3 text-xs text-gray-400 focus:outline-none" placeholder="Paste custom buttons or widget code...">{{ $post->sidebar_right_content }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
         </div>
     </form>
@@ -182,6 +227,20 @@
 @push('scripts')
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script>
+    // Essential for Image Resize Module to find Quill
+    window.Quill = Quill;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+<script>
+    // Register Image Resize Module safely
+    try {
+        if (typeof ImageResize !== 'undefined') {
+            Quill.register('modules/imageResize', ImageResize.default || ImageResize);
+        }
+    } catch (e) {
+        console.error("Quill Image Resize failed to load:", e);
+    }
+
     // Initialize Quill
     var quill = new Quill('#editor', {
         theme: 'snow',
@@ -193,7 +252,10 @@
                 [{ 'list': 'ordered'}, { 'list': 'bullet' }],
                 ['link', 'image'],
                 ['clean']
-            ]
+            ],
+            imageResize: {
+                displaySize: true
+            }
         }
     });
 
@@ -228,6 +290,14 @@
             lucide.createIcons();
         }
     });
+    function toggleSidebarContent(side, value) {
+        const area = document.getElementById(`${side}-content-area`);
+        if(value === 'custom') {
+            area.classList.remove('hidden');
+        } else {
+            area.classList.add('hidden');
+        }
+    }
 </script>
 @endpush
 @endsection

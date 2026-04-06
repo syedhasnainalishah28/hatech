@@ -79,8 +79,16 @@ class AdminBlogController extends Controller
             'meta_description' => 'nullable|string|max:500',
             'focus_keyword' => 'nullable|string|max:255',
             'canonical_url' => 'nullable|url|max:255',
+            'sidebar_left_show' => 'nullable|boolean',
+            'sidebar_right_show' => 'nullable|boolean',
+            'sidebar_left_type' => 'required|in:standard,custom',
+            'sidebar_right_type' => 'required|in:standard,custom',
+            'sidebar_left_content' => 'nullable|string',
+            'sidebar_right_content' => 'nullable|string',
         ]);
 
+        $data['sidebar_left_show'] = $request->has('sidebar_left_show');
+        $data['sidebar_right_show'] = $request->has('sidebar_right_show');
         $data['slug'] = $data['slug'] ?: Str::slug($data['title']);
         $data['author_id'] = Auth::id();
 
@@ -120,7 +128,16 @@ class AdminBlogController extends Controller
             'meta_description' => 'nullable|string|max:500',
             'focus_keyword' => 'nullable|string|max:255',
             'canonical_url' => 'nullable|url|max:255',
+            'sidebar_left_show' => 'nullable|boolean',
+            'sidebar_right_show' => 'nullable|boolean',
+            'sidebar_left_type' => 'required|in:standard,custom',
+            'sidebar_right_type' => 'required|in:standard,custom',
+            'sidebar_left_content' => 'nullable|string',
+            'sidebar_right_content' => 'nullable|string',
         ]);
+
+        $data['sidebar_left_show'] = $request->has('sidebar_left_show');
+        $data['sidebar_right_show'] = $request->has('sidebar_right_show');
 
         // Publish toggle handler
         if ($data['status'] == 'published' && !$post->published_at) {
