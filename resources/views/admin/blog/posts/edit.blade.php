@@ -33,7 +33,7 @@
             <a href="{{ route('admin.blog.posts') }}" class="px-6 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-gray-300 font-bold text-xs transition-colors flex items-center gap-2">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
             </a>
-            <button type="button" onclick="document.getElementById('savePost').submit()" class="bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-emerald-500/20">
+            <button type="submit" form="savePost" class="bg-gradient-to-r from-emerald-500 to-teal-400 text-white px-8 py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-transform flex items-center gap-2 shadow-xl shadow-emerald-500/20">
                 <i data-lucide="check" class="w-4 h-4"></i> Update Post
             </button>
         </div>
