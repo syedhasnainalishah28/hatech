@@ -1,45 +1,45 @@
-<?php echo '<?xml version="1.0" encoding="UTF-8"?>'; ?>
+{!! '<' . '?xml version="1.0" encoding="UTF-8"?' . '>' !!}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <!-- Static Master Pages -->
     <url>
-        <loc>{{ url('/') }}</loc>
-        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <loc>@php echo url('/'); @endphp</loc>
+        <lastmod>@php echo now()->toAtomString(); @endphp</lastmod>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>{{ url('/services') }}</loc>
-        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <loc>@php echo url('/services'); @endphp</loc>
+        <lastmod>@php echo now()->toAtomString(); @endphp</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>{{ url('/work') }}</loc>
-        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <loc>@php echo url('/work'); @endphp</loc>
+        <lastmod>@php echo now()->toAtomString(); @endphp</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>{{ url('/blogs') }}</loc>
-        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <loc>@php echo url('/blogs'); @endphp</loc>
+        <lastmod>@php echo now()->toAtomString(); @endphp</lastmod>
         <changefreq>daily</changefreq>
         <priority>0.9</priority>
     </url>
     <url>
-        <loc>{{ url('/about') }}</loc>
-        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <loc>@php echo url('/about'); @endphp</loc>
+        <lastmod>@php echo now()->toAtomString(); @endphp</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>{{ url('/team') }}</loc>
-        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <loc>@php echo url('/team'); @endphp</loc>
+        <lastmod>@php echo now()->toAtomString(); @endphp</lastmod>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
     <url>
-        <loc>{{ url('/contact') }}</loc>
-        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <loc>@php echo url('/contact'); @endphp</loc>
+        <lastmod>@php echo now()->toAtomString(); @endphp</lastmod>
         <changefreq>yearly</changefreq>
         <priority>0.7</priority>
     </url>
@@ -47,8 +47,8 @@
     <!-- Dynamic Portfolio Works -->
     @foreach ($portfolios as $portfolio)
         <url>
-            <loc>{{ url('/work/' . $portfolio->slug) }}</loc>
-            <lastmod>{{ $portfolio->updated_at->toAtomString() }}</lastmod>
+            <loc>@php echo url('/work/' . $portfolio->slug); @endphp</loc>
+            <lastmod>@php echo $portfolio->updated_at->toAtomString(); @endphp</lastmod>
             <changefreq>monthly</changefreq>
             <priority>0.8</priority>
         </url>
@@ -57,8 +57,8 @@
     <!-- Dynamic SEO Blog Posts -->
     @foreach ($posts as $post)
         <url>
-            <loc>{{ url('/blogs/' . $post->slug) }}</loc>
-            <lastmod>{{ $post->updated_at->toAtomString() }}</lastmod>
+            <loc>@php echo url('/blogs/' . $post->slug); @endphp</loc>
+            <lastmod>@php echo $post->updated_at->toAtomString(); @endphp</lastmod>
             <changefreq>weekly</changefreq>
             <priority>0.8</priority>
         </url>
