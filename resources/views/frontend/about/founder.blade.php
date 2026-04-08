@@ -1,169 +1,309 @@
 @extends('layouts.app')
 
-@section('title', 'Meet Our Founder | HA Tech')
+@section('title', $page->meta_title ?? 'Syed Hasnain Ali Shah | Founder & Visionary | HA Tech')
+@section('meta_description', $page->meta_description ?? 'The visionary force behind HA Tech. Exploring the professional narrative and strategic evolution of Syed Hasnain Ali Shah.')
+@section('meta_keywords', $page->meta_keywords ?? 'Syed Hasnain Ali Shah, Hasnain Shah, Founder HA Tech, Tech Visionary Pakistan')
 
 @section('content')
 @php
     $data = $page->components_json ?? [];
+    $gallery = $data['gallery'] ?? [];
+    $timeline = $data['experience_timeline'] ?? [];
+    $qualifications = $data['qualifications'] ?? [];
+    $mastery = $data['mastery_index'] ?? [];
 @endphp
-@if($page->html_content)
-    {!! $page->html_content !!}
-@elseif($data)
-<div class="min-h-screen relative pt-24 pb-16 px-4 sm:px-6 lg:px-8 overflow-hidden antialiased">
-    <div class="relative max-w-5xl mx-auto">
-        <a href="{{ url('/about') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-[#d4a574] transition-colors mb-6 group">
-            <i data-lucide="arrow-left" class="w-4 h-4 group-hover:-translate-x-1 transition-transform"></i>
-            <span class="font-bold uppercase tracking-widest text-[10px]">Back to Evolution</span>
-        </a>
 
-        <div class="reveal-up text-center mb-12">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 tracking-tighter">
-                <span class="bg-gradient-to-r from-white via-white to-gray-500 bg-clip-text text-transparent">
-                    Meet Our Founder
-                </span>
-            </h1>
-            <p class="text-[#d4a574] font-black tracking-[0.3em] uppercase text-[9px]">The Visionary Force</p>
-        </div>
+{{-- Schema Injection --}}
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Person',
+    'name' => 'Syed Hasnain Ali Shah',
+    'jobTitle' => 'Founder & Visionary',
+    'worksFor' => [
+        '@type' => 'Organization',
+        'name' => 'HA Tech',
+        'url' => url('/')
+    ],
+    'url' => url()->current(),
+    'description' => $page->meta_description ?? 'Founder of HA Tech.'
+], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+</script>
 
-        <div class="relative">
-            <div class="absolute inset-x-0 -top-20 -bottom-20 bg-[#3B0000]/5 rounded-full blur-3xl"></div>
-            <div class="relative bg-[#0a0506]/60 border border-white/5 rounded-3xl p-6 md:p-12 shadow-2xl backdrop-blur-xl">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-                    <div class="aspect-square relative group max-w-sm mx-auto w-full">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#3B0000] to-[#d4a574] rounded-2xl blur-xl opacity-10 group-hover:opacity-30 transition-opacity"></div>
-                        <div class="relative h-full w-full bg-gradient-to-br from-[#1a0f11] to-[#2B0E14] border border-white/5 rounded-2xl flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-[1.02] transition-transform duration-700">
-                            @if(isset($data['image_path']))
-                                <img src="{{ asset('storage/' . $data['image_path']) }}" class="absolute inset-0 w-full h-full object-cover">
-                            @else
-                                <div class="text-8xl text-[#d4a574] font-black opacity-10 tracking-widest select-none">HA</div>
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <i data-lucide="rocket" class="w-24 h-24 text-[#d4a574] opacity-20"></i>
+<div class="min-h-screen bg-[#050203] text-white overflow-hidden selection:bg-[#d4a574] selection:text-black">
+    
+    {{-- Ultra-Premium Hero Section --}}
+    <section class="relative min-h-screen flex items-center pt-20 px-4 sm:px-6 lg:px-8">
+        {{-- Three.js Canvas Backdrop --}}
+        <canvas id="identity-canvas" class="absolute inset-0 z-0 pointer-events-none opacity-40"></canvas>
+
+        <div class="relative z-10 max-w-7xl mx-auto w-full">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                {{-- Left Side: Identity & Name --}}
+                <div class="lg:col-span-7 space-y-8">
+                    <div class="reveal-up inline-flex items-center gap-3">
+                        <span class="text-[10px] sm:text-xs font-black uppercase tracking-[0.5em] text-[#d4a574]/80 px-6 py-2 bg-white/5 border border-white/10 rounded-full backdrop-blur-md">
+                            The Visionary Archive
+                        </span>
+                    </div>
+
+                    <h1 class="text-5xl sm:text-6xl md:text-7xl font-black text-white leading-none tracking-tighter uppercase reveal-up drop-shadow-2xl">
+                        Syed <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#d4a574] to-white/40">Hasnain Ali</span> Shah
+                    </h1>
+                    <p class="text-xl md:text-2xl text-gray-500 font-medium tracking-tight border-l-4 border-[#3B0000] pl-6 py-2">
+                        Founder, Visionary & Architect of Gen Z Digital Evolution.
+                    </p>
+
+                    {{-- Visual Mastery Index in Hero --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-10 reveal-up max-w-2xl">
+                        @foreach($mastery ?: [] as $skill)
+                        <div class="space-y-2 group/skill">
+                            <div class="flex justify-between items-center text-[11px] font-black uppercase tracking-widest transition-all group-hover/skill:tracking-[0.15em]">
+                                <span class="text-white drop-shadow-md">{{ $skill['label'] ?? ($skill['skill'] ?? 'Skill') }}</span>
+                                <span class="text-[#d4a574]">{{ $skill['value'] ?? ($skill['percentage'] ?? 0) }}%</span>
+                            </div>
+                            <div class="h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
+                                @php $val = intval($skill['value'] ?? ($skill['percentage'] ?? 0)); @endphp
+                                <div class="h-full bg-gradient-to-r from-[#3B0000] to-[#d4a574] shadow-[0_0_15px_#d4a574]/40" style="width: {{ $val }}%"></div>
+                            </div>
+                        </div>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Right Side: The Main Identity Card 3D Scroll-Reveal --}}
+                <div class="lg:col-span-5 reveal-up identity-card-container" style="perspective: 2000px;">
+                    <style>
+                        .identity-img { filter: grayscale(100%) brightness(0.9); transition: all 0.8s ease-in-out; }
+                        .identity-3d-card:hover .identity-img { filter: grayscale(0%) brightness(1.1); transform: scale(1.05); }
+                        
+                        /* Scroll Opening Effect */
+                        .scroll-reveal-card {
+                            transform: rotateX(25deg) rotateY(-10deg) scale(0.85);
+                            opacity: 0.3;
+                            transition: transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 1.2s ease;
+                            transform-origin: bottom center;
+                        }
+                        .scroll-reveal-card.is-open {
+                            transform: rotateX(0deg) rotateY(0deg) scale(1);
+                            opacity: 1;
+                        }
+                    </style>
+                    <div class="relative group identity-3d-card scroll-reveal-card" id="founder-card">
+                        <div class="absolute -inset-2 bg-gradient-to-r from-[#3B0000] via-[#d4a574]/20 to-black rounded-2xl blur-xl opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+                        <div class="relative bg-black rounded-2xl overflow-hidden border border-white/10 aspect-[4/5] shadow-2xl">
+                             @php $displayImage = $data['image_path'] ?? ($data['primary_image'] ?? null); @endphp
+                             @if($displayImage)
+                                <img src="{{ asset('storage/' . $displayImage) }}" class="w-full h-full object-cover identity-img">
+                             @else
+                                <div class="w-full h-full flex flex-col items-center justify-center p-12 bg-gradient-to-br from-[#1a0f11] to-[#050203]">
+                                    <i data-lucide="shield-check" class="w-32 h-32 text-[#d4a574] opacity-20 mb-4"></i>
+                                    <span class="text-[12rem] font-black text-white opacity-5 tracking-tighter leading-none select-none">HA</span>
                                 </div>
-                            @endif
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0506] via-transparent to-transparent opacity-60"></div>
-                        </div>
-                    </div>
-
-                    <div class="space-y-6">
-                        <div>
-                            <h2 class="text-2xl md:text-3xl font-black text-white mb-2 tracking-tighter uppercase leading-tight">{{ $page->name }}</h2>
-                            <div class="inline-block px-3 py-1 bg-[#d4a574]/10 border border-[#d4a574]/20 rounded-full">
-                                <span class="text-[#d4a574] font-black text-[9px] tracking-widest uppercase">{{ $data['designation'] ?? 'Founder & Visionary' }}</span>
-                            </div>
-                        </div>
-
-                        <p class="text-gray-400 text-base md:text-lg leading-relaxed font-medium">
-                            {!! nl2br(e($data['biography'] ?? "With over a decade of experience in the tech industry, Hasan founded HA Tech with a vision to create a digital agency that truly understands and serves the Gen Z generation. His passion for innovation and commitment to excellence drives our company forward.")) !!}
-                        </p>
-
-                        <div class="grid grid-cols-2 gap-6 pt-6 border-t border-white/5">
-                            <div>
-                                <div class="text-2xl font-black text-white tracking-widest">{{ $data['stat1_value'] ?? '10+' }}</div>
-                                <div class="text-[#d4a574] text-[9px] font-black uppercase tracking-widest mt-1">{{ $data['stat1_label'] ?? 'Years Evolution' }}</div>
-                            </div>
-                            <div>
-                                <div class="text-2xl font-black text-white tracking-widest">{{ $data['stat2_value'] ?? '1k+' }}</div>
-                                <div class="text-[#d4a574] text-[9px] font-black uppercase tracking-widest mt-1">{{ $data['stat2_label'] ?? 'Impact Units' }}</div>
-                            </div>
-                        </div>
-
-                        <div class="flex gap-4">
-                            @if(isset($data['linkedin']) && $data['linkedin'])
-                            <a href="{{ $data['linkedin'] }}" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-[#d4a574] hover:text-[#2B0E14] flex items-center justify-center transition-all shadow-lg active:scale-90" title="LinkedIn">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
-                            </a>
-                            @endif
-                            @if(isset($data['twitter']) && $data['twitter'])
-                            <a href="{{ $data['twitter'] }}" target="_blank" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-[#d4a574] hover:text-[#2B0E14] flex items-center justify-center transition-all shadow-lg active:scale-90" title="Twitter / X">
-                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.259 5.631 5.905-5.631zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                            </a>
-                            @endif
-                            @if(isset($data['email']) && $data['email'])
-                            <a href="mailto:{{ $data['email'] }}" class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-[#d4a574] hover:text-[#2B0E14] flex items-center justify-center transition-all shadow-lg active:scale-90" title="Email">
-                                <i data-lucide="mail" class="w-4 h-4"></i>
-                            </a>
-                            @endif
+                             @endif
+                             
+                             <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                             <div class="absolute bottom-10 left-10 right-10">
+                                <div class="flex justify-between items-center">
+                                    <div class="text-left">
+                                        <p class="text-xs font-black uppercase tracking-widest text-[#d4a574] mb-1">Identity Status</p>
+                                        <p class="text-2xl font-black text-white italic tracking-tighter uppercase">Verified Founder</p>
+                                    </div>
+                                    <div class="w-16 h-16 rounded-2xl bg-white/5 backdrop-blur-2xl border border-white/10 flex items-center justify-center text-[#d4a574] animate-pulse">
+                                        <i data-lucide="fingerprint" class="w-8 h-8"></i>
+                                    </div>
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
-    </div>
-</div>
-@else
-<div class="min-h-screen relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden antialiased">
-    <div class="relative max-w-5xl mx-auto">
-        <a href="{{ url('/about') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-[#d4a574] transition-colors mb-8 group">
-            <i data-lucide="arrow-left" class="w-5 h-5 group-hover:-translate-x-1 transition-transform"></i>
-            <span class="font-bold uppercase tracking-widest text-xs">Back to About Evolution</span>
-        </a>
 
-        <div class="reveal-up text-center mb-16">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 tracking-tighter">
-                <span class="bg-gradient-to-r from-white via-white to-gray-500 bg-clip-text text-transparent tracking-tighter">
-                    Meet Our Founder
-                </span>
-            </h1>
-            <p class="text-[#d4a574] font-black tracking-[0.3em] uppercase text-[10px]">The Visionary Force</p>
+        {{-- Scroll Indicator --}}
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 reveal-up">
+            <div class="w-[1px] h-20 bg-gradient-to-b from-[#d4a574] to-transparent"></div>
         </div>
+    </section>
 
-        <div class="relative">
-            <div class="absolute inset-x-0 -top-20 -bottom-20 bg-[#3B0000]/10 rounded-full blur-3xl"></div>
-            <div class="relative bg-[#0a0506]/60 border border-white/5 rounded-3xl p-8 md:p-14 shadow-2xl backdrop-blur-xl">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-                    <div class="aspect-square relative group">
-                        <div class="absolute inset-0 bg-gradient-to-br from-[#3B0000] to-[#d4a574] rounded-3xl blur-xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                        <div class="relative h-full w-full bg-gradient-to-br from-[#1a0f11] to-[#2B0E14] border border-white/10 rounded-3xl flex items-center justify-center overflow-hidden shadow-2xl group-hover:scale-[1.02] transition-transform duration-700">
-                            <div class="text-9xl text-[#d4a574] font-black opacity-10 tracking-widest group-hover:scale-110 transition-transform duration-700 select-none">HA</div>
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <i data-lucide="rocket" class="w-32 h-32 text-[#d4a574] opacity-20 group-hover:translate-y--4 group-hover:rotate-12 transition-transform duration-700"></i>
+    {{-- Detailed Narrative Section --}}
+    <section class="py-32 px-4 sm:px-6 lg:px-8 relative">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20">
+                
+                {{-- Left: Expertise & Skills (Mastery Index) --}}
+                <div class="lg:col-span-4 space-y-16">
+                    <div class="reveal-up space-y-6">
+                        <h3 class="text-xs font-black uppercase tracking-[0.5em] text-[#d4a574]">01. Mastery Index</h3>
+                        <div class="space-y-8">
+                            <div class="p-8 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-2xl relative overflow-hidden group">
+                                <div class="absolute -top-4 -left-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                    <i data-lucide="quote" class="w-20 h-20 text-[#d4a574]"></i>
+                                </div>
+                                <p class="text-xl md:text-2xl text-white font-medium italic leading-relaxed relative z-10">
+                                    "{{ $data['quote'] ?? 'Technology is the bridge between human ambition and real-world evolution.' }}"
+                                </p>
                             </div>
-                            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0506] via-transparent to-transparent opacity-60"></div>
                         </div>
                     </div>
 
-                    <div class="space-y-8">
-                        <div>
-                            <h2 class="text-4xl md:text-5xl font-black text-white mb-3 tracking-tighter uppercase italic">Hasan Ali</h2>
-                            <div class="inline-block px-4 py-1.5 bg-[#d4a574]/10 border border-[#d4a574]/30 rounded-full">
-                                <span class="text-[#d4a574] font-black text-[10px] tracking-widest uppercase">Founder & Visionary</span>
+                    {{-- Qualifications --}}
+                    @if($qualifications)
+                    <div class="reveal-up space-y-6 pt-12">
+                        <h3 class="text-xs font-black uppercase tracking-[0.5em] text-[#d4a574]">02. Academic Honor</h3>
+                        <div class="space-y-6 border-l border-white/10 pl-6">
+                            @foreach($qualifications as $edu)
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-black text-[#d4a574] uppercase tracking-widest">{{ $edu['year'] }}</p>
+                                <p class="text-lg font-black text-white uppercase tracking-tighter">{{ $edu['title'] }}</p>
+                                <p class="text-xs text-gray-400 font-medium italic">{{ $edu['institution'] }}</p>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
+                </div>
+
+                {{-- Right: Long-form Story --}}
+                <div class="lg:col-span-8">
+                    <div class="reveal-up space-y-12">
+                        <div class="inline-block px-3 py-1 bg-[#3B0000]/30 border border-[#3B0000]/50 rounded text-[9px] font-black tracking-widest text-[#d4a574] uppercase">
+                            Professional Narrative
+                        </div>
+                        <div class="prose prose-invert max-w-none">
+                            <p class="text-3xl md:text-5xl font-black text-white leading-[1.1] tracking-tighter uppercase italic reveal-up">
+                                "The true evolution of tech isn't just code; <span class="text-[#d4a574]">it's culture.</span>"
+                            </p>
+                            <div class="mt-12 text-gray-400 text-xl leading-relaxed space-y-8 font-medium identity-biography-rich">
+                                {!! $data['biography'] ?? "Founder & Architect of Gen Z Digital Evolution." !!}
                             </div>
                         </div>
 
-                        <p class="text-gray-400 text-lg leading-relaxed">
-                            With over a decade of experience in the tech industry, Hasan founded HA Tech
-                            with a vision to create a digital agency that truly understands and serves the
-                            Gen Z generation. His passion for innovation and commitment to excellence drives
-                            our company forward.
-                        </p>
-
-                        <div class="grid grid-cols-2 gap-8 pt-6 border-t border-white/5">
-                            <div>
-                                <div class="text-3xl font-black text-white tracking-widest">10+</div>
-                                <div class="text-[#d4a574] text-[10px] font-black uppercase tracking-widest mt-1">Years Evolution</div>
+                        {{-- Gallery Grid --}}
+                        @if($gallery)
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-12">
+                            @foreach($gallery as $img)
+                            <div class="reveal-up aspect-video rounded-3xl overflow-hidden border border-white/5 relative group">
+                                <img src="{{ asset('storage/' . $img['url']) }}" class="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-1000">
+                                <div class="absolute bottom-5 left-5 right-5 p-4 bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl translate-y-10 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-white">{{ $img['caption'] }}</p>
+                                </div>
                             </div>
-                            <div>
-                                <div class="text-3xl font-black text-white tracking-widest">1k+</div>
-                                <div class="text-[#d4a574] text-[10px] font-black uppercase tracking-widest mt-1">Impact Units</div>
-                            </div>
+                            @endforeach
                         </div>
-
-                        <div class="flex gap-5">
-                            <a href="#" class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-[#d4a574] hover:text-[#2B0E14] flex items-center justify-center transition-all group shadow-lg active:scale-90">
-                                <i data-lucide="linkedin" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                            </a>
-                            <a href="#" class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-[#d4a574] hover:text-[#2B0E14] flex items-center justify-center transition-all group shadow-lg active:scale-90">
-                                <i data-lucide="twitter" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                            </a>
-                            <a href="#" class="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 hover:bg-[#d4a574] hover:text-[#2B0E14] flex items-center justify-center transition-all group shadow-lg active:scale-90">
-                                <i data-lucide="mail" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                            </a>
-                        </div>
+                        @endif
                     </div>
                 </div>
+
             </div>
         </div>
-    </div>
+    </section>
+
+    {{-- Vertical Timeline: Road to Evolution --}}
+    @if($timeline)
+    <section class="py-32 px-4 sm:px-6 lg:px-8 border-t border-white/5 bg-[#080506]">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-24 reveal-up">
+                <h2 class="text-4xl md:text-6xl font-black uppercase italic tracking-tighter">The Journey of <span class="text-[#d4a574]">Evolution</span></h2>
+                <div class="w-20 h-1 bg-[#d4a574] mx-auto mt-6"></div>
+            </div>
+
+            <div class="space-y-24 relative before:absolute before:left-[11px] before:top-0 before:bottom-0 before:w-[1px] before:bg-white/10">
+                @foreach($timeline as $event)
+                <div class="relative pl-12 reveal-up group">
+                    <div class="absolute left-0 top-1.5 w-6 h-6 rounded-full bg-black border-4 border-[#3B0000] z-10 group-hover:border-[#d4a574] transition-colors"></div>
+                    <div class="space-y-3">
+                        <span class="text-xs font-black text-[#d4a574] tracking-[0.3em] uppercase">{{ $event['year'] }}</span>
+                        <h4 class="text-2xl font-black text-white uppercase italic tracking-tight">{{ $event['title'] }}</h4>
+                        <p class="text-gray-500 font-medium leading-relaxed max-w-2xl">{{ $event['description'] }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
 </div>
-@endif
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+             // 1. Initialize Scroll Reveal (Opening/Closing Effect)
+            const scrollCards = document.querySelectorAll(".scroll-reveal-card");
+            const scrollObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-open');
+                    } else {
+                        // Optional: Re-close if out of view (feels more like 'scroll' animation)
+                        entry.target.classList.remove('is-open');
+                    }
+                });
+            }, { 
+                threshold: 0.2,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            scrollCards.forEach(card => scrollObserver.observe(card));
+
+            // 2. Simple Three.js Particle Background (Zero Lag)
+            const canvas = document.getElementById('identity-canvas');
+            if (canvas) {
+                const scene = new THREE.Scene();
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+                renderer.setPixelRatio(window.devicePixelRatio);
+                renderer.setSize(window.innerWidth, window.innerHeight);
+
+                const particlesGeometry = new THREE.BufferGeometry();
+                const particlesCount = 4000;
+                const posArray = new Float32Array(particlesCount * 3);
+                for(let i=0; i < particlesCount * 3; i++) {
+                    posArray[i] = (Math.random() - 0.5) * 12;
+                }
+                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                const particlesMaterial = new THREE.PointsMaterial({ 
+                    size: 0.015, 
+                    color: '#f4d1a0',
+                    transparent: true,
+                    opacity: 1.0,
+                    blending: THREE.AdditiveBlending
+                });
+                const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+                scene.add(particlesMesh);
+                camera.position.z = 2;
+
+                function animate() {
+                    requestAnimationFrame(animate);
+                    particlesMesh.rotation.y += 0.001;
+                    particlesMesh.rotation.x += 0.0005;
+                    renderer.render(scene, camera);
+                }
+                animate();
+
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+
+            // 3. Smooth Reveal Observer
+            const observerOptions = { threshold: 0.1 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+        });
+    </script>
+@endpush
 @endsection

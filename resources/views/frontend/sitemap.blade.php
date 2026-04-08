@@ -63,4 +63,14 @@
             <priority>0.8</priority>
         </url>
     @endforeach
+
+    <!-- Dynamic Team & Authority Profiles -->
+    @foreach ($members as $member)
+        <url>
+            <loc>@php echo url('/team/' . $member->slug); @endphp</loc>
+            <lastmod>@php echo $member->updated_at->toAtomString(); @endphp</lastmod>
+            <changefreq>monthly</changefreq>
+            <priority>0.9</priority>
+        </url>
+    @endforeach
 </urlset>

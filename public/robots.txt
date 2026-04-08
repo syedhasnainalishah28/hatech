@@ -1,2 +1,12 @@
+# HA Tech - Robots.txt
+# High-end Digital Agency | Gen Z Evolution
+
 User-agent: *
-Disallow:
+Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /signup
+Disallow: /auth/
+
+# Path to Sitemap
+Sitemap: https://hatechservices.com.pk/sitemap.xml

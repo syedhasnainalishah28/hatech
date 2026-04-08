@@ -14,6 +14,7 @@ use App\Models\BlogPost;
 use App\Models\SitePage;
 use App\Models\ServiceOrder;
 use App\Models\Service;
+use App\Models\TeamMember;
 use App\Mail\WelcomeEmail;
 
 class FrontendController extends Controller
@@ -67,10 +68,13 @@ class FrontendController extends Controller
     {
         $posts = BlogPost::where('status', 'published')->orderByDesc('published_at')->get();
         $portfolios = Portfolio::latest()->get();
+        $members = TeamMember::where('is_active', true)->get();
+        
         // Return view as XML
         return response()->view('frontend.sitemap', [
             'posts' => $posts,
-            'portfolios' => $portfolios
+            'portfolios' => $portfolios,
+            'members' => $members
         ])->header('Content-Type', 'text/xml');
     }
 
@@ -86,15 +90,21 @@ class FrontendController extends Controller
         return view('frontend.about.index', compact('page')); 
     }
     
+    public function teamSingle($slug)
+    {
+        $member = TeamMember::where('slug', $slug)->where('is_active', true)->firstOrFail();
+        return view('frontend.team-single', compact('member'));
+    }
+
     public function founder() 
     { 
-        $page = SitePage::firstOrNew(['slug' => 'founder'], ['html_content' => '', 'components_json' => []]);
+        $page = SitePage::where('slug', 'founder')->firstOrFail();
         return view('frontend.about.founder', compact('page')); 
     }
     
     public function ceo() 
     { 
-        $page = SitePage::firstOrNew(['slug' => 'ceo'], ['html_content' => '', 'components_json' => []]);
+        $page = SitePage::where('slug', 'ceo')->firstOrFail();
         return view('frontend.about.ceo', compact('page')); 
     }
     public function products() { return view('frontend.products'); }

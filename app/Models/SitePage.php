@@ -9,6 +9,10 @@ class SitePage extends Model
     protected $fillable = [
         'name',
         'slug',
+        'meta_title',
+        'meta_description',
+        'meta_keywords',
+        'schema_markup',
         'html_content',
         'css_content',
         'components_json',

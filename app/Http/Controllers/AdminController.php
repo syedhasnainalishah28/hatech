@@ -214,43 +214,96 @@ class AdminController extends Controller
     
     public function pageUpdate(Request $request, $id) {
         $page = SitePage::findOrFail($id);
-        $page->name = $request->name;
         
+        // Update Core Fields
+        $page->name = $request->name;
         if ($request->has('slug')) {
             $page->slug = $request->slug;
             $page->html_content = $request->html_content;
         }
 
-        $components = $page->components_json ?? [];
+        // Update High-Authority SEO Fields
+        $page->meta_title = $request->meta_title;
+        $page->meta_description = $request->meta_description;
+        $page->meta_keywords = $request->meta_keywords;
+        $page->schema_markup = $request->schema_markup;
 
-        if (in_array($page->slug, ['founder', 'ceo'])) {
-            $components['designation'] = $request->designation;
-            $components['biography'] = $request->biography;
-            $components['linkedin'] = $request->linkedin;
-            $components['twitter'] = $request->twitter;
-            $components['email'] = $request->email;
-            $components['stat1_label'] = $request->stat1_label;
-            $components['stat1_value'] = $request->stat1_value;
-            $components['stat2_label'] = $request->stat2_label;
-            $components['stat2_value'] = $request->stat2_value;
+        // Handle Specialized Components
+        if (in_array($page->slug, ['founder', 'ceo', 'about']) && ($request->has('biography') || $request->has('hero_title'))) {
+            // Visual Form Handling takes priority for known pages
+            $components = $page->components_json ?? [];
 
-            if ($request->hasFile('image')) {
-                $components['image_path'] = $request->file('image')->store('profiles', 'public');
+            if (in_array($page->slug, ['founder', 'ceo'])) {
+                $components['designation'] = $request->designation;
+                $components['biography'] = $request->biography;
+                $components['linkedin'] = $request->linkedin;
+                $components['twitter'] = $request->twitter;
+                $components['email'] = $request->email;
+                $components['quote'] = $request->quote;
+                $components['stat1_label'] = $request->stat1_label;
+                $components['stat1_value'] = $request->stat1_value;
+                $components['stat2_label'] = $request->stat2_label;
+                $components['stat2_value'] = $request->stat2_value;
+
+                // Handle Mastery Index (Repeater)
+                if ($request->has('mastery')) {
+                    $components['mastery_index'] = array_values($request->mastery);
+                }
+
+                // Handle Timeline (Repeater)
+                if ($request->has('timeline')) {
+                    $components['experience_timeline'] = array_values($request->timeline);
+                }
+
+                // Handle Qualifications (Repeater)
+                if ($request->has('honor')) {
+                    $components['qualifications'] = array_values($request->honor);
+                }
+
+                // Handle Gallery (Multi-file Repeater)
+                if ($request->has('gallery')) {
+                    $galleryData = [];
+                    foreach ($request->gallery as $key => $item) {
+                        $path = $item['existing'] ?? null;
+                        if ($request->hasFile("gallery.$key.file")) {
+                            $path = $request->file("gallery.$key.file")->store('profiles/gallery', 'public');
+                        }
+                        
+                        if ($path) {
+                            $galleryData[] = [
+                                'url' => $path,
+                                'caption' => $item['caption'] ?? ''
+                            ];
+                        }
+                    }
+                    $components['gallery'] = $galleryData;
+                }
+
+                if ($request->hasFile('image')) {
+                    $components['image_path'] = $request->file('image')->store('profiles', 'public');
+                    unset($components['primary_image']);
+                }
+            } elseif ($page->slug === 'about') {
+                $components['hero_title'] = $request->hero_title;
+                $components['hero_subtitle'] = $request->hero_subtitle;
+                $components['story_title'] = $request->story_title;
+                $components['story_content'] = $request->story_content;
+                $components['mission_desc'] = $request->mission_desc;
+                $components['vision_desc'] = $request->vision_desc;
+                $components['excellence_desc'] = $request->excellence_desc;
             }
-        } elseif ($page->slug === 'about') {
-            $components['hero_title'] = $request->hero_title;
-            $components['hero_subtitle'] = $request->hero_subtitle;
-            $components['story_title'] = $request->story_title;
-            $components['story_content'] = $request->story_content;
-            $components['mission_desc'] = $request->mission_desc;
-            $components['vision_desc'] = $request->vision_desc;
-            $components['excellence_desc'] = $request->excellence_desc;
+            $page->components_json = $components;
+        } elseif ($request->filled('components_json_raw')) {
+            // Direct JSON Override (Technical Area)
+            $decoded = json_decode($request->components_json_raw, true);
+            if (json_last_error() === JSON_ERROR_NONE) {
+                $page->components_json = $decoded;
+            }
         }
 
-        $page->components_json = $components;
         $page->save();
 
-        return redirect()->route('admin.pages')->with('success', 'Page updated successfully.');
+        return redirect()->route('admin.pages')->with('success', 'Page identity and SEO updated successfully.');
     }
     public function pageDestroy($id) {
         $page = SitePage::findOrFail($id);
@@ -560,14 +613,28 @@ class AdminController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|unique:team_members,slug',
             'role' => 'required|string|max:255',
+            'bio' => 'nullable|string',
+            'expertise' => 'nullable|string',
+            'achievements' => 'nullable|string',
             'gradient' => 'required|string|max:255',
             'image_path' => 'nullable|image|max:2048',
             'linkedin_url' => 'nullable|string',
             'twitter_url' => 'nullable|string',
+            'instagram_url' => 'nullable|string',
+            'github_url' => 'nullable|string',
             'email' => 'nullable|string',
-            'sort_order' => 'required|integer'
+            'sort_order' => 'required|integer',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
+            'schema_markup' => 'nullable|string'
         ]);
+
+        if (empty($data['slug'])) {
+            $data['slug'] = \Illuminate\Support\Str::slug($data['name']);
+        }
 
         $data['is_active'] = $request->has('is_active');
 
@@ -592,20 +659,34 @@ class AdminController extends Controller
 
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'slug' => 'nullable|string|unique:team_members,slug,' . $id,
             'role' => 'required|string|max:255',
+            'bio' => 'nullable|string',
+            'expertise' => 'nullable|string',
+            'achievements' => 'nullable|string',
             'gradient' => 'required|string|max:255',
             'image_path' => 'nullable|image|max:2048',
             'linkedin_url' => 'nullable|string',
             'twitter_url' => 'nullable|string',
+            'instagram_url' => 'nullable|string',
+            'github_url' => 'nullable|string',
             'email' => 'nullable|string',
-            'sort_order' => 'required|integer'
+            'sort_order' => 'required|integer',
+            'meta_title' => 'nullable|string|max:255',
+            'meta_description' => 'nullable|string',
+            'meta_keywords' => 'nullable|string',
+            'schema_markup' => 'nullable|string'
         ]);
+
+        if (empty($data['slug'])) {
+            $data['slug'] = \Illuminate\Support\Str::slug($data['name']);
+        }
 
         $data['is_active'] = $request->has('is_active');
 
         if ($request->hasFile('image_path')) {
             if ($member->image_path) {
-                Storage::disk('public')->delete($member->image_path);
+                \Storage::disk('public')->delete($member->image_path);
             }
             $data['image_path'] = $request->file('image_path')->store('team', 'public');
         }

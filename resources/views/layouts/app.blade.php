@@ -10,11 +10,46 @@
     @yield('canonical_url')
     @yield('og_tags')
     
+    <!-- Organization & Website Schema -->
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'Organization',
+        'name' => 'HA Tech - Gen Z Evolution',
+        'url' => url('/'),
+        'logo' => asset('assets/logo.png'),
+        'contactPoint' => [
+            '@type' => 'ContactPoint',
+            'telephone' => '+92-300-0000000',
+            'contactType' => 'customer service',
+            'areaServed' => 'PK',
+            'availableLanguage' => 'en'
+        ],
+        'sameAs' => [
+            'https://linkedin.com/company/hatech',
+            'https://twitter.com/hatech'
+        ]
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+    <script type="application/ld+json">
+    {!! json_encode([
+        '@context' => 'https://schema.org',
+        '@type' => 'WebSite',
+        'name' => 'HA Tech',
+        'url' => url('/'),
+        'potentialAction' => [
+            '@type' => 'SearchAction',
+            'target' => url('/blogs') . '?search={search_term_string}',
+            'query-input' => 'required name=search_term_string'
+        ]
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT) !!}
+    </script>
+    
     
     <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,900;1,900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- ICONS -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>

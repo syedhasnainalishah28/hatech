@@ -19,6 +19,35 @@
             </div>
         </div>
 
+        <!-- SEO SUITE -->
+        <div class="bg-white/5 p-8 rounded-3xl border border-white/5 space-y-6">
+            <div class="flex items-center gap-3 mb-2">
+                <i data-lucide="search" class="w-5 h-5 text-[#d4a574]"></i>
+                <h4 class="text-xs font-black uppercase tracking-widest text-white">Identity SEO Suite</h4>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                    <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Meta Title (Authority Branding)</label>
+                    <input type="text" name="meta_title" value="{{ $page->meta_title }}" placeholder="e.g. Syed Hasnain Ali Shah | Founder & Visionary" class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-[#d4a574] transition-all text-sm text-white">
+                </div>
+                <div class="space-y-2">
+                    <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Focus Keywords</label>
+                    <input type="text" name="meta_keywords" value="{{ $page->meta_keywords }}" placeholder="Hasan Ali, Hasnain Shah, Syed Hasnain..." class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-[#d4a574] transition-all text-sm text-white">
+                </div>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Meta Description (Search Snippet)</label>
+                <textarea name="meta_description" rows="2" class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-[#d4a574] transition-all text-sm text-gray-300">{{ $page->meta_description }}</textarea>
+            </div>
+
+            <div class="space-y-2">
+                <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">JSON-LD Person Schema</label>
+                <textarea name="schema_markup" rows="4" class="w-full bg-black/40 border border-white/5 rounded-xl px-4 py-3 outline-none focus:border-[#d4a574] transition-all text-xs text-gray-400 font-mono" placeholder='{ "@@context": "https://schema.org", "@@type": "Person"... }'>{{ $page->schema_markup }}</textarea>
+            </div>
+        </div>
+
         <div class="space-y-4">
             <div class="flex items-center justify-between">
                 <label class="text-[10px] uppercase font-black tracking-widest text-[#d4a574] flex items-center gap-2">

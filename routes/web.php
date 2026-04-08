@@ -14,6 +14,7 @@ Route::get('/sitemap.xml', [FrontendController::class, 'sitemap'])->name('sitema
 
 Route::get('/about', [FrontendController::class, 'about']);
 Route::get('/team', [FrontendController::class, 'team']);
+Route::get('/team/{slug}', [FrontendController::class, 'teamSingle'])->name('team.single');
 Route::get('/about/founder', [FrontendController::class, 'founder']);
 Route::get('/about/ceo', [FrontendController::class, 'ceo']);
 Route::get('/products', [FrontendController::class, 'products']);

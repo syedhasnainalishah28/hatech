@@ -85,7 +85,7 @@
             <!-- Auth Buttons -->
             <div class="hidden lg:flex items-center gap-4">
                 @auth
-                    @if(Auth::user()->is_admin)
+                    @if(Auth::user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="px-6 py-2.5 rounded-full bg-gradient-to-r from-[#d4a574] to-[#e8b44a] text-[#2b0e14] font-semibold hover:from-[#e8b44a] hover:to-[#d4a574] transition-all duration-300 shadow-lg shadow-[#d4a574]/30 flex items-center gap-2">
                             <i data-lucide="shield" class="w-4 h-4"></i> Admin Panel
                         </a>
@@ -212,7 +212,7 @@
         <!-- Bottom CTA -->
         <div class="px-4 py-6 border-t border-white/5 space-y-3">
             @auth
-                @if(Auth::user()->is_admin)
+                @if(Auth::user()->isAdmin())
                     <a href="{{ route('admin.dashboard') }}" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-[#d4a574] to-[#e8b44a] text-[#2b0e14] font-black text-sm hover:from-[#e8b44a] hover:to-[#d4a574] transition-all shadow-lg shadow-[#d4a574]/20">
                         <i data-lucide="shield" class="w-4 h-4"></i> Admin Panel
                     </a>
