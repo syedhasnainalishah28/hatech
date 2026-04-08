@@ -1,0 +1,23 @@
+# RELEASE NOTES: HA TECH IDENTITY & PROFILE UPDATES (2026-04-08)
+
+This release includes the comprehensive Visual Profile Editor and UI refinements for the leadership team.
+
+## 1. Visual Profile Editor (Founder & CEO)
+- Dynamic Repeaters: Mastery Index (Skills), Evolutionary Timeline (Milestones), and Lifestyle Gallery.
+- Professional Quote: Enchanced visibility and dynamic quote management.
+- Academic Honor: New qualifications repeater for educational history.
+- Real-time Sync: Quill rich-text editor integration for biographies.
+
+## 2. Team Module & SEO
+- Advanced SEO Suite: Meta Title, Description, Keywords, and Schema Markup for all pages.
+- Team Single: Dynamic profile pages for team members with social links.
+- Database: Migration scripts for SEO and team data columns.
+
+## 3. UI/UX Refinement
+- Hero Section: Enlarged typography and high-contrast gold/onyx palette.
+- Three.js: Optimized particle background with higher density and brilliance.
+- Navbar: Corrected branding and navigation links.
+
+## 4. Deployment
+- Corrected .cpanel.yml for automated deployment to globalre server.
+- Integrated /run-migrations route for live database updates.
