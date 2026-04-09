@@ -74,5 +74,24 @@ class IdentitySyncSeeder extends Seeder
                 'gradient' => 'from-[#4a1520] to-[#d4a574]'
             ]
         );
+
+        // 4. Sync About Page (Generic)
+        SitePage::updateOrCreate(
+            ['slug' => 'about'],
+            [
+                'name' => 'About Our Evolution',
+                'components_json' => [
+                    "hero_title" => "Shaping the Digital Future",
+                    "hero_subtitle" => "We are a team of visionaries, designers, and engineers dedicated to building extraordinary digital experiences.",
+                    "story_title" => "Our Story",
+                    "story_content" => "HA Tech was born from a vision to revolutionize the digital landscape for the new generation. We're not just another IT agency - we're a movement, a platform, and a community dedicated to pushing the boundaries of what's possible in the digital world.",
+                    "mission_desc" => "To empower brands with cutting-edge technology and creative excellence.",
+                    "vision_desc" => "To be the global leader in digital transformation and innovation.",
+                    "excellence_desc" => "Committed to delivering premium quality every time"
+                ],
+                'is_published' => true,
+                'is_active' => true,
+            ]
+        );
     }
 }
