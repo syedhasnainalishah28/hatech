@@ -29,17 +29,26 @@
         </div>
 
         <div class="flex flex-col md:flex-row items-center gap-6">
-            @if(App::isDownForMaintenance())
-                <a href="{{ url('/hasnain-access') }}" target="_blank" class="flex items-center gap-3 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all group">
-                    <span class="text-[10px] font-black uppercase tracking-widest text-gray-300">Admin Bypass Link</span>
-                    <i data-lucide="external-link" class="w-4 h-4 text-[#d4a574]"></i>
-                </a>
-            @endif
+            @php 
+                $devMode = \App\Models\SiteSetting::get('developer_mode', false);
+            @endphp
+            
+            <a href="{{ route('admin.logs') }}" class="flex items-center gap-3 px-6 py-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all border border-white/5">
+                <i data-lucide="activity" class="w-4 h-4 text-[#d4a574]"></i>
+                <span class="text-[10px] font-black uppercase tracking-widest text-gray-300">Activity Logs</span>
+            </a>
 
             <form action="{{ route('admin.maintenance.toggle') }}" method="POST">
                 @csrf
-                <button type="submit" class="px-10 py-4 {{ App::isDownForMaintenance() ? 'bg-emerald-500 text-black' : 'bg-rose-500 text-white' }} rounded-xl font-black text-xs uppercase tracking-[0.2em] shadow-xl hover:scale-105 active:scale-95 transition-all">
+                <button type="submit" class="w-full md:w-auto px-6 py-3 {{ App::isDownForMaintenance() ? 'bg-emerald-500 text-black' : 'bg-rose-500 text-white' }} rounded-xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl hover:scale-105 transition-all">
                     {{ App::isDownForMaintenance() ? 'Go Live' : 'Under Maintenance' }}
+                </button>
+            </form>
+
+            <form action="{{ route('admin.dev_mode.toggle') }}" method="POST">
+                @csrf
+                <button type="submit" class="w-full md:w-auto px-6 py-3 {{ $devMode ? 'bg-amber-500 text-black' : 'bg-white/10 text-white' }} rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all border border-white/10">
+                    {{ $devMode ? 'Dev Mode: ON' : 'Dev Mode: OFF' }}
                 </button>
             </form>
         </div>

@@ -14,7 +14,9 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'role' => \App\Http\Middleware\CheckRole::class,
+            'file.sanitize' => \App\Http\Middleware\SanitizeFileUploads::class,
         ]);
+        $middleware->append(\App\Http\Middleware\SanitizeFileUploads::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

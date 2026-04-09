@@ -47,9 +47,21 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/track/{id}', [FrontendController::class, 'trackServiceOrder'])->name('service.order.track');
 });
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
+// --- Hardened Admin Auth ---
+Route::prefix('ha-secure-portal-3192112004')->group(function() {
+    Route::get('/login', [\App\Http\Controllers\Auth\AdminAuthController::class, 'showLogin'])->name('admin.login');
+    Route::post('/login', [\App\Http\Controllers\Auth\AdminAuthController::class, 'login']);
+    Route::get('/verify-2fa', [\App\Http\Controllers\Auth\AdminAuthController::class, 'show2fa'])->name('admin.2fa');
+    Route::post('/verify-2fa', [\App\Http\Controllers\Auth\AdminAuthController::class, 'verify2fa']);
+    Route::post('/logout', [\App\Http\Controllers\Auth\AdminAuthController::class, 'logout'])->name('admin.logout');
+});
+
+// --- Obfuscated Admin Protected Portal ---
+Route::middleware(['auth:admin'])->prefix('ha-secure-portal-3192112004')->group(function () {
     Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::post('/maintenance/toggle', [AdminController::class, 'toggleMaintenance'])->name('admin.maintenance.toggle');
+    Route::post('/dev-mode/toggle', [AdminController::class, 'toggleDevMode'])->name('admin.dev_mode.toggle');
+    Route::get('/logs', [AdminController::class, 'activityLogs'])->name('admin.logs');
     
     // Portfolios
     Route::get('/portfolios', [AdminController::class, 'portfolios'])->name('admin.portfolios');
@@ -131,13 +143,25 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/blog/posts/{id}/edit', [\App\Http\Controllers\AdminBlogController::class, 'postsEdit'])->name('admin.blog.posts.edit');
     Route::post('/blog/posts/{id}', [\App\Http\Controllers\AdminBlogController::class, 'postsUpdate'])->name('admin.blog.posts.update');
     Route::delete('/blog/posts/{id}', [\App\Http\Controllers\AdminBlogController::class, 'postsDestroy'])->name('admin.blog.posts.destroy');
-});// Temporary Migration Route for Shared Hosting
+});
+
+// Temporary Migration Route for Shared Hosting
 Route::get('/run-migrations', function () {
     try {
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         return "Migrations ran successfully: " . \Illuminate\Support\Facades\Artisan::output();
     } catch (\Exception $e) {
         return "Migration Error: " . $e->getMessage();
+    }
+});
+
+Route::get('/secure-installation-v1', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'AdminSeeder', '--force' => true]);
+        return "Security Installation Successful. Admin Created. Delete this route after use.";
+    } catch (\Exception $e) {
+        return "Install Error: " . $message = $e->getMessage();
     }
 });
 

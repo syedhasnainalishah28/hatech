@@ -35,6 +35,22 @@ class AdminController extends Controller
             return back()->with('success', 'Maintenance Mode ON. Use /hasnain-access to bypass.');
         }
     }
+    
+    public function toggleDevMode(Request $request) {
+        $current = \App\Models\SiteSetting::get('developer_mode', false);
+        \App\Models\SiteSetting::set('developer_mode', !$current, 'boolean');
+        
+        // This is a logic placeholder - actual APP_DEBUG is in .env 
+        // In a real environment, we would also update the .env file if permissions exist
+        // or use the SiteSetting in the AppServiceProvider to override config
+        
+        return back()->with('success', 'Development Mode ' . (!$current ? 'ON' : 'OFF'));
+    }
+    public function activityLogs() {
+        $logs = \App\Models\AdministrativeLog::with('admin')->latest()->paginate(20);
+        return view('admin.logs', compact('logs'));
+    }
+
     public function dashboard() {
         $stats = [
             'revenue' => Order::where('status', 'completed')->sum('total') ?? 0,
