@@ -140,3 +140,12 @@ Route::get('/run-migrations', function () {
         return "Migration Error: " . $e->getMessage();
     }
 });
+
+Route::get('/run-identity-sync', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('db:seed', ['--class' => 'IdentitySyncSeeder', '--force' => true]);
+        return "Data Sync Successful: " . \Illuminate\Support\Facades\Artisan::output();
+    } catch (\Exception $e) {
+        return "Sync Error: " . $e->getMessage();
+    }
+});
