@@ -286,6 +286,173 @@
         </div>
     </section>
 
+    <!-- HA TECH PORTFOLIO GENERATOR SECTION -->
+    <section class="relative py-32 px-4 overflow-hidden border-t border-white/5">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-0 left-0 w-[600px] h-[600px] bg-[#d4a574]/5 rounded-full blur-[150px]"></div>
+            <div class="absolute bottom-0 right-0 w-[400px] h-[400px] bg-[#3B0000]/20 rounded-full blur-[100px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <!-- Left: Video -->
+                <div class="reveal-up relative group">
+                    <!-- Glow Border Effect -->
+                    <div class="absolute -inset-[3px] bg-gradient-to-r from-[#d4a574] via-[#e8b44a] to-[#d4a574] rounded-2xl blur-[8px] opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                    <div class="relative rounded-xl overflow-hidden border-2 border-[#d4a574]/60 shadow-2xl shadow-[#d4a574]/20 aspect-video bg-black">
+                        <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-90">
+                            <source src="{{ asset('SHAH VIDEO.mp4') }}" type="video/mp4">
+                        </video>
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                        <!-- Live Badge -->
+                        <div class="absolute top-4 left-4 flex items-center gap-2 bg-black/60 backdrop-blur-md border border-[#d4a574]/30 px-4 py-2 rounded-full">
+                            <span class="flex h-2 w-2 relative">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#d4a574] opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-[#d4a574]"></span>
+                            </span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-[#d4a574]">Live Platform</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Content -->
+                <div class="reveal-up">
+                    <div class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#d4a574]/10 border border-[#d4a574]/20 rounded-full mb-6">
+                        <i data-lucide="sparkles" class="w-3 h-3 text-[#d4a574]"></i>
+                        <span class="text-[10px] font-black uppercase tracking-widest text-[#d4a574]">HA Tech SaaS Platform</span>
+                    </div>
+                    <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight tracking-tighter">
+                        Portfolio<br>
+                        <span class="bg-gradient-to-r from-[#d4a574] via-[#e8b44a] to-[#c49a6b] bg-clip-text text-transparent">Generator</span>
+                    </h2>
+                    <p class="text-lg text-gray-400 mb-8 leading-relaxed">
+                        Sirf <strong class="text-white">60 seconds</strong> mein aapka fully professional portfolio tayyar. AI-powered tool — zero coding required. Bas details dalo, site ready.
+                    </p>
+
+                    <div class="space-y-4 mb-10">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#d4a574]/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="zap" class="w-4 h-4 text-[#d4a574]"></i>
+                            </div>
+                            <span class="text-gray-300">60-second AI-powered portfolio generation</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#d4a574]/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="code-2" class="w-4 h-4 text-[#d4a574]"></i>
+                            </div>
+                            <span class="text-gray-300">Zero-code required — koi technical knowledge nahi chahiye</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#d4a574]/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="globe" class="w-4 h-4 text-[#d4a574]"></i>
+                            </div>
+                            <span class="text-gray-300">Professional live site — seedha deploy hoti hai</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="gift" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <span class="text-gray-300"><strong class="text-emerald-400">1 Mahina Free</strong> — Gen Z Hustler Bundle ke saath</span>
+                        </div>
+                    </div>
+
+                    <a href="https://potfoliogenerator.hatechservices.com.pk/" target="_blank"
+                       class="group inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#d4a574] to-[#e8b44a] text-[#2b0e14] font-black rounded-2xl hover:scale-105 transition-all shadow-xl shadow-[#d4a574]/20 uppercase tracking-widest text-sm">
+                        <i data-lucide="external-link" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
+                        Access Portfolio Generator
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GEN Z HUSTLER BUNDLE SECTION -->
+    <section class="relative py-32 px-4 overflow-hidden border-t border-white/5 bg-gradient-to-b from-[#0a0506] via-[#0f0608] to-[#0a0506]">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#d4a574]/5 rounded-full blur-[200px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="text-center mb-20 reveal-up">
+                <div class="inline-flex items-center gap-2 px-5 py-2 bg-[#d4a574]/10 border border-[#d4a574]/30 rounded-full mb-6">
+                    <i data-lucide="flame" class="w-4 h-4 text-[#d4a574] animate-pulse"></i>
+                    <span class="text-[11px] font-black uppercase tracking-[0.4em] text-[#d4a574]">Gen Z Evolution Program</span>
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black mb-6 leading-none tracking-tighter">
+                    THE <span class="bg-gradient-to-r from-[#d4a574] via-[#e8b44a] to-[#c49a6b] bg-clip-text text-transparent">GEN Z HUSTLER</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Ultimate Bundle — Everything you need to build, launch, and scale your tech empire.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <div class="reveal-up">
+                    <div class="relative mb-10 group">
+                        <div class="absolute -inset-6 bg-gradient-to-r from-[#d4a574]/30 to-[#3B0000]/30 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                        <img src="{{ asset('images/THE GEN Z HUSTLE.png') }}" alt="The Gen Z Hustle Book"
+                             class="relative w-full max-w-sm mx-auto rounded-2xl shadow-2xl group-hover:scale-[1.02] transition-transform duration-500">
+                    </div>
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                        <h4 class="text-[10px] font-black uppercase tracking-widest text-[#d4a574] mb-4">Real Market Value</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center py-2 border-b border-white/5"><span class="text-sm text-gray-300">Build Your Digital Empire (Book)</span><span class="text-sm font-black text-gray-400 line-through">PKR 25,000</span></div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5"><span class="text-sm text-gray-300">Portfolio Generator (1 Month)</span><span class="text-sm font-black text-gray-400 line-through">PKR 10,000/mo</span></div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5"><span class="text-sm text-gray-300">Lead Hunter AI (1 Month)</span><span class="text-sm font-black text-gray-400 line-through">PKR 10,000/mo</span></div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5"><span class="text-sm text-gray-300">Video Series + Slides</span><span class="text-sm font-black text-gray-400 line-through">PKR 15,000</span></div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5"><span class="text-sm text-gray-300">50+ Premium HTML Templates</span><span class="text-sm font-black text-gray-400 line-through">PKR 30,000</span></div>
+                            <div class="flex justify-between items-center py-2"><span class="text-sm font-black text-white">TOTAL REAL VALUE</span><span class="text-sm font-black text-gray-400 line-through">PKR 90,000+</span></div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-[#d4a574]/30 flex justify-between items-center">
+                            <span class="text-lg font-black text-white uppercase tracking-widest">Your Price</span>
+                            <span class="text-3xl font-black bg-gradient-to-r from-[#d4a574] to-[#e8b44a] bg-clip-text text-transparent">PKR 26,999</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-up space-y-4">
+                    @php
+                    $features = [
+                        ['icon' => 'book-open', 'num' => '01', 'title' => '"Build Your Digital Empire" Guide Book', 'desc' => 'Mukammal roadmap Roman Urdu mein — mindset se lekar client closing tak.'],
+                        ['icon' => 'globe', 'num' => '02', 'title' => 'Portfolio Generator (1 Month Premium)', 'desc' => 'AI-driven tool — 60 seconds mein professional portfolio. Zero code required.'],
+                        ['icon' => 'search', 'num' => '03', 'title' => 'Lead Hunter AI (1 Month Premium)', 'desc' => 'Google Maps aur LinkedIn se "Hot Clients" automatically dhoondh kar laata hai.'],
+                        ['icon' => 'video', 'num' => '04', 'title' => 'Business Blueprint Video Series', 'desc' => 'AI tools se $1000/month ka business — step-by-step video guides.'],
+                        ['icon' => 'presentation', 'num' => '05', 'title' => 'Presentation Slides (Roman Urdu)', 'desc' => 'Asaan Roman Urdu slides taake koi bhi concept mushkil na lage.'],
+                        ['icon' => 'layout-template', 'num' => '06', 'title' => '50+ Premium HTML Templates', 'desc' => 'Gym, Dentist, Portfolio, SaaS — high-end designs jo aap clients ko bech sako.'],
+                        ['icon' => 'file-text', 'num' => '07', 'title' => 'Proposal Architect (Coming Soon Early Access)', 'desc' => 'AI aapke liye winning proposals likhega — pehla access is bundle mein.'],
+                        ['icon' => 'users', 'num' => '08', 'title' => 'Exclusive Hustlers Community', 'desc' => 'Private WhatsApp/Discord group — direct access to Hasnain.'],
+                        ['icon' => 'shield-check', 'num' => '09', 'title' => 'Commercial License', 'desc' => 'Templates aur generator se clients ke liye sites banao aur paise lo.'],
+                        ['icon' => 'refresh-cw', 'num' => '10', 'title' => 'Future Updates Guarantee', 'desc' => 'Phase 2 ke naye tools aur templates — aapko sabse pehle milenge.'],
+                    ];
+                    @endphp
+
+                    @foreach($features as $f)
+                    <div class="group flex items-start gap-4 p-4 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#d4a574]/20 transition-all duration-300">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#d4a574]/10 flex items-center justify-center text-[#d4a574] group-hover:bg-[#d4a574]/20 transition-colors">
+                            <i data-lucide="{{ $f['icon'] }}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[10px] font-black text-[#d4a574]/50 tabular-nums">{{ $f['num'] }}</span>
+                                <h4 class="text-sm font-black text-white">{{ $f['title'] }}</h4>
+                            </div>
+                            <p class="text-xs text-gray-500 leading-relaxed">{{ $f['desc'] }}</p>
+                        </div>
+                    </div>
+                    @endforeach
+
+                    <div class="pt-4">
+                        <a href="{{ url('/contact') }}" class="w-full group relative flex items-center justify-center gap-3 px-10 py-6 overflow-hidden rounded-2xl bg-gradient-to-r from-[#d4a574] to-[#e8b44a] hover:scale-[1.02] transition-all duration-300 shadow-2xl shadow-[#d4a574]/20 text-[#2b0e14] font-black uppercase tracking-widest text-base">
+                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                            <span>Buy Now — PKR 26,999</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <p class="text-center text-[11px] text-gray-600 mt-3 uppercase tracking-widest">Secure Checkout • Instant Access</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="bundle-enquiry"></div>
+
     <!-- INNOVATION DASHBOARD SECTION -->
     <section class="relative py-24 px-4 overflow-hidden">
         <div class="absolute inset-0 bg-[#0a0506] -z-20"></div>
@@ -713,6 +880,161 @@
             </div>
         </div>
     </section>
+
+    <!-- CTA SECTION (Minimalist Premium) -->
+
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#d4a574]/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="zap" class="w-4 h-4 text-[#d4a574]"></i>
+                            </div>
+                            <span class="text-gray-300">60-second AI-powered portfolio generation</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#d4a574]/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="code-2" class="w-4 h-4 text-[#d4a574]"></i>
+                            </div>
+                            <span class="text-gray-300">Zero-code required — koi technical knowledge nahi chahiye</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-[#d4a574]/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="globe" class="w-4 h-4 text-[#d4a574]"></i>
+                            </div>
+                            <span class="text-gray-300">Professional live site — seedha deploy hoti hai</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="gift" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <span class="text-gray-300"><strong class="text-emerald-400">1 Mahina Free</strong> — Gen Z Hustler Bundle ke saath</span>
+                        </div>
+                    </div>
+
+                    <a href="https://potfoliogenerator.hatechservices.com.pk/" target="_blank"
+                       class="group inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-[#d4a574] to-[#e8b44a] text-[#2b0e14] font-black rounded-2xl hover:scale-105 transition-all shadow-xl shadow-[#d4a574]/20 uppercase tracking-widest text-sm">
+                        <i data-lucide="external-link" class="w-5 h-5 group-hover:rotate-12 transition-transform"></i>
+                        Access Portfolio Generator
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GEN Z HUSTLER BUNDLE SECTION -->
+    <section class="relative py-32 px-4 overflow-hidden border-t border-white/5 bg-gradient-to-b from-[#0a0506] via-[#0f0608] to-[#0a0506]">
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#d4a574]/5 rounded-full blur-[200px]"></div>
+        </div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <!-- Header -->
+            <div class="text-center mb-20 reveal-up">
+                <div class="inline-flex items-center gap-2 px-5 py-2 bg-[#d4a574]/10 border border-[#d4a574]/30 rounded-full mb-6">
+                    <i data-lucide="flame" class="w-4 h-4 text-[#d4a574] animate-pulse"></i>
+                    <span class="text-[11px] font-black uppercase tracking-[0.4em] text-[#d4a574]">Gen Z Evolution Program</span>
+                </div>
+                <h2 class="text-5xl md:text-7xl font-black mb-6 leading-none tracking-tighter">
+                    THE <span class="bg-gradient-to-r from-[#d4a574] via-[#e8b44a] to-[#c49a6b] bg-clip-text text-transparent">GEN Z HUSTLER</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Ultimate Bundle — Everything you need to build, launch, and scale your tech empire.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                <!-- Left: Book Image + Value Stack -->
+                <div class="reveal-up">
+                    <!-- Book Cover -->
+                    <div class="relative mb-10 group">
+                        <div class="absolute -inset-6 bg-gradient-to-r from-[#d4a574]/30 to-[#3B0000]/30 rounded-3xl blur-2xl opacity-60 group-hover:opacity-100 transition-opacity"></div>
+                        <img src="{{ asset('images/THE GEN Z HUSTLE.png') }}" alt="The Gen Z Hustle Book"
+                             class="relative w-full max-w-sm mx-auto rounded-2xl shadow-2xl group-hover:scale-[1.02] transition-transform duration-500">
+                    </div>
+
+                    <!-- Total Value Table -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+                        <h4 class="text-[10px] font-black uppercase tracking-widest text-[#d4a574] mb-4">Real Market Value</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-sm text-gray-300">Build Your Digital Empire (Book)</span>
+                                <span class="text-sm font-black text-gray-400 line-through">PKR 25,000</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-sm text-gray-300">Portfolio Generator (1 Month)</span>
+                                <span class="text-sm font-black text-gray-400 line-through">PKR 10,000/mo</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-sm text-gray-300">Lead Hunter AI (1 Month)</span>
+                                <span class="text-sm font-black text-gray-400 line-through">PKR 10,000/mo</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-sm text-gray-300">Video Series + Slides</span>
+                                <span class="text-sm font-black text-gray-400 line-through">PKR 15,000</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2 border-b border-white/5">
+                                <span class="text-sm text-gray-300">50+ Premium HTML Templates</span>
+                                <span class="text-sm font-black text-gray-400 line-through">PKR 30,000</span>
+                            </div>
+                            <div class="flex justify-between items-center py-2">
+                                <span class="text-sm font-black text-white">TOTAL REAL VALUE</span>
+                                <span class="text-sm font-black text-gray-400 line-through">PKR 90,000+</span>
+                            </div>
+                        </div>
+                        <div class="mt-4 pt-4 border-t border-[#d4a574]/30 flex justify-between items-center">
+                            <span class="text-lg font-black text-white uppercase tracking-widest">Your Price</span>
+                            <span class="text-3xl font-black bg-gradient-to-r from-[#d4a574] to-[#e8b44a] bg-clip-text text-transparent">PKR 26,999</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Features List + CTA -->
+                <div class="reveal-up space-y-4">
+                    <!-- Feature Items -->
+                    @php
+                    $features = [
+                        ['icon' => 'book-open', 'num' => '01', 'title' => '"Build Your Digital Empire" Guide Book', 'desc' => 'Mukammal roadmap Roman Urdu mein — mindset se lekar client closing tak.'],
+                        ['icon' => 'globe', 'num' => '02', 'title' => 'Portfolio Generator (1 Month Premium)', 'desc' => 'AI-driven tool — 60 seconds mein professional portfolio. Zero code required.'],
+                        ['icon' => 'search', 'num' => '03', 'title' => 'Lead Hunter AI (1 Month Premium)', 'desc' => 'Google Maps aur LinkedIn se "Hot Clients" automatically dhoondh kar laata hai.'],
+                        ['icon' => 'video', 'num' => '04', 'title' => 'Business Blueprint Video Series', 'desc' => 'AI tools se $1000/month ka business — step-by-step video guides.'],
+                        ['icon' => 'presentation', 'num' => '05', 'title' => 'Presentation Slides (Roman Urdu)', 'desc' => 'Asaan Roman Urdu slides taake koi bhi concept mushkil na lage.'],
+                        ['icon' => 'layout-template', 'num' => '06', 'title' => '50+ Premium HTML Templates', 'desc' => 'Gym, Dentist, Portfolio, SaaS — high-end designs jo aap clients ko bech sako.'],
+                        ['icon' => 'file-text', 'num' => '07', 'title' => 'Proposal Architect (Coming Soon Early Access)', 'desc' => 'AI aapke liye winning proposals likhega — pehla access is bundle mein.'],
+                        ['icon' => 'users', 'num' => '08', 'title' => 'Exclusive Hustlers Community', 'desc' => 'Private WhatsApp/Discord group — direct access to Hasnain.'],
+                        ['icon' => 'shield-check', 'num' => '09', 'title' => 'Commercial License', 'desc' => 'Templates aur generator se clients ke liye sites banao aur paise lo.'],
+                        ['icon' => 'refresh-cw', 'num' => '10', 'title' => 'Future Updates Guarantee', 'desc' => 'Phase 2 ke naye tools aur templates — aapko sabse pehle milenge.'],
+                    ];
+                    @endphp
+
+                    @foreach($features as $f)
+                    <div class="group flex items-start gap-4 p-4 rounded-2xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.05] hover:border-[#d4a574]/20 transition-all duration-300">
+                        <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#d4a574]/10 flex items-center justify-center text-[#d4a574] group-hover:bg-[#d4a574]/20 transition-colors">
+                            <i data-lucide="{{ $f['icon'] }}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="text-[10px] font-black text-[#d4a574]/50 tabular-nums">{{ $f['num'] }}</span>
+                                <h4 class="text-sm font-black text-white">{{ $f['title'] }}</h4>
+                            </div>
+                            <p class="text-xs text-gray-500 leading-relaxed">{{ $f['desc'] }}</p>
+                        </div>
+                    </div>
+                    @endforeach
+
+                    <!-- CTA -->
+                    <div class="pt-4">
+                        <button onclick="document.getElementById('bundle-enquiry').scrollIntoView({behavior:'smooth'})"
+                            class="w-full group relative px-10 py-6 overflow-hidden rounded-2xl transform hover:scale-[1.02] transition-all duration-300 shadow-2xl shadow-[#d4a574]/20">
+                            <div class="absolute inset-0 bg-gradient-to-r from-[#d4a574] via-[#e8b44a] to-[#d4a574] bg-size-200 animate-gradient"></div>
+                            <div class="relative z-10 flex items-center justify-center gap-3 text-[#2b0e14] font-black uppercase tracking-widest text-base">
+                                <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                                <span>Buy Now — PKR 26,999</span>
+                                <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                            </div>
+                        </button>
+                        <p class="text-center text-[11px] text-gray-600 mt-3 uppercase tracking-widest">Secure Checkout • Instant Access</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div id="bundle-enquiry"></div>
 
     <!-- CTA SECTION (Minimalist Premium) -->
     <section class="relative py-16 px-4">
