@@ -297,10 +297,9 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                 <!-- Left: Video -->
                 <div class="reveal-up relative group">
-                    <!-- Glow Border Effect -->
-                    <div class="absolute -inset-[3px] bg-gradient-to-r from-[#d4a574] via-[#e8b44a] to-[#d4a574] rounded-2xl blur-[8px] opacity-70 group-hover:opacity-100 transition-opacity duration-500 animate-pulse"></div>
-                    <div class="relative rounded-xl overflow-hidden border-2 border-[#d4a574]/60 shadow-2xl shadow-[#d4a574]/20 aspect-video bg-black">
-                        <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-90">
+                    <div class="relative rounded-xl overflow-hidden w-full bg-black"
+                         style="border: 2px solid #d4a574; box-shadow: 0 0 4px #d4a574, 0 0 8px #d4a574, 0 0 2px #e8b44a;">
+                        <video autoplay muted loop playsinline class="w-full h-auto block">
                             <source src="{{ asset('SHAH VIDEO.mp4') }}" type="video/mp4">
                         </video>
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
